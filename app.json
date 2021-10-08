@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "mediaPlayer",
+    "slug": "mediaPlayer",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "mediaPlayer"
+}
