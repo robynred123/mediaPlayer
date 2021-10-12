@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-export const Home = () => {
+export const Songs = () => {
   return (
     <View>
-      <Text>Home</Text>
+      <Text>Hello</Text>
     </View>
   );
-};
+}; 
