@@ -15,7 +15,6 @@ export const Routes = () => {
   const loadingSongs = useSelector(state => state?.songs)
   const [ showLoading, setShowLoading] = useState(false)
 
-
   useEffect(() => {
     if(loadingSongs) {
       setShowLoading(true)
