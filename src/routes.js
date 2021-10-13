@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { useSelector } from 'react-redux';
+import { View } from 'react-native'
 
 import { Home } from './screens/Home';
 import { Songs } from './screens/Songs';
@@ -9,8 +12,28 @@ import { Playlists } from './screens/Playlists';
 
 export const Routes = () => {
   const Tab = createBottomTabNavigator();
+  const loadingSongs = useSelector(state => state?.songs)
+  const [ showLoading, setShowLoading] = useState(false)
+
+
+  useEffect(() => {
+    if(loadingSongs) {
+      setShowLoading(true)
+    }
+    else {
+      setShowLoading(false)
+    }
+  }, [loadingSongs])
 
   return (
+    <>
+      <View>
+        <Spinner  
+          visible={showLoading}
+          textContent={'Loading'}
+        />
+      </View>
+    
     <NavigationContainer>
       <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -40,5 +63,6 @@ export const Routes = () => {
         <Tab.Screen name='Playlists' component={Playlists} />
       </Tab.Navigator>
     </NavigationContainer>
+    </>
   );
 };
