@@ -12,7 +12,7 @@ import { Playlists } from './screens/Playlists';
 
 export const Routes = () => {
   const Tab = createBottomTabNavigator();
-  const loadingSongs = useSelector(state => state?.songs)
+  const loadingSongs = useSelector(state => state?.songs.loading)
   const [ showLoading, setShowLoading] = useState(false)
 
   useEffect(() => {

@@ -5,28 +5,27 @@ import {
 } from "../util/constants";
 import MSSQL from "react-native-mssql";
 import { config } from "../util/config";
+import { getSongsDBConnect } from "../util/dbConnection";
 
 export const getSongs = () => {
-  const getSongsQuery = `SELECT * FROM Songs`;
   return (dispatch) => {
     dispatch({
       type: GET_SONGS,
     });
-    const connected = MSSQL.connect(config);
-    if (connected) {
-      dispatch(MSSQL.executeQuery(getSongsQuery))
-        .then((result) => {
-          dispatch({
-            type: GET_SONGS_SUCCESS,
-            response: JSON.stringify(result),
-          });
-        })
-        .catch((e) => {
-          dispatch({
-            type: GET_SONGS_FAILURE,
-            error: result,
-          });
-        });
+    console.log('woo')
+    try {
+      const result = getSongsDBConnect();
+      console.log('RESULT', result)
+      dispatch({
+        type: GET_SONGS_SUCCESS,
+        response: JSON.stringify(result),
+      });
+    } catch {
+      console.log('failure')
+      dispatch({
+        type: GET_SONGS_FAILURE,
+        error: "whoops",
+      });
     }
     MSSQL.close();
   };

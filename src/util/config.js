@@ -1,5 +1,5 @@
 export const config = {
-  server: 'http://localhost',
+  server: 'localhost',
   username: 'sa',
   password: 'someThingComplicated1234',
   database: 'mediaPlayer',

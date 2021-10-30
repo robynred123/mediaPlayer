@@ -1,20 +1,22 @@
-import React, { useSelector, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
-import { useDispatch } from "react-redux";
-import { songActions } from "../actions";
+import { useDispatch, useSelector } from "react-redux";
+import * as songActions from "../actions/songs";
 
 export const Songs = () => {
   const [ songs, setSongs ] = []
-  const [ loading, songList, error ] = useSelector(state => state?.songs)
+  const songList = []//useSelector(state => state?.songs?.songList)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const { getSongList } = songActions
-      dispatch(getSongList())
+    const { getSongs } = songActions
+      dispatch(getSongs())
 }, [])
 
 useEffect(() => {
-  if(songList && songList.length !== songs.length) {
+  if(songList && 
+    songs &&
+    songList?.length !== songs.length) {
     setSongs(songList)
   }
 }, [songList])

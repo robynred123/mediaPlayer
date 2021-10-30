@@ -23,7 +23,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        error: 'Failed to Load Songs'
+        error: action.error
       }
     default: 
       return state;
