@@ -3,24 +3,28 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { View } from 'react-native'
 
 import { Home } from './screens/Home';
 import { Songs } from './screens/Songs';
 import { Playlists } from './screens/Playlists';
+import { createTables, getSongs } from '../src/actions/songs'
 
 export const Routes = () => {
   const Tab = createBottomTabNavigator();
-  const loadingSongs = useSelector(state => state?.songs.loading)
-  const [ showLoading, setShowLoading] = useState(false)
+  const loadingSongs = useSelector(state => state?.songs?.loading)
+  const tablesCreated = useSelector(state => state?.songs?.tablesCreated)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    if(loadingSongs) {
-      setShowLoading(true)
-    }
-    else {
-      setShowLoading(false)
+    dispatch(createTables())
+  }, [])
+  
+
+  useEffect(() => {
+    if(tablesCreated) {
+      dispatch(getSongs())
     }
   }, [loadingSongs])
 
@@ -28,7 +32,7 @@ export const Routes = () => {
     <>
       <View>
         <Spinner  
-          visible={showLoading}
+          visible={loadingSongs}
           textContent={'Loading'}
         />
       </View>

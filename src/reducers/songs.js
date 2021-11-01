@@ -1,31 +1,47 @@
-import { GET_SONGS, GET_SONGS_SUCCESS, GET_SONGS_FAILURE } from '../util/constants'
+import {
+  GET_SONGS,
+  GET_SONGS_SUCCESS,
+  GET_SONGS_FAILURE,
+  CREATE_TABLES,
+  CREATE_TABLES_SUCCESS,
+  CREATE_TABLES_FAILURE,
+} from "../util/constants";
 
 export const initialState = {
-  songList: [],
+  songList: null,
   loading: false,
-  error: null
+  error: null,
+  tablesCreated: false,
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case CREATE_TABLES:
     case GET_SONGS:
       return {
         ...state,
-        loading: true
+        loading: true,
       };
-    case GET_SONGS_SUCCESS: 
+    case CREATE_TABLES_SUCCESS:
       return {
         ...state,
         loading: false,
-        songList: [{'id': '1', 'name': 'ruby'}] //update
-      }
+        tablesCreated: true,
+      };
+    case GET_SONGS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        songList: [{ id: "1", name: "ruby" }], //update
+      };
+    case CREATE_TABLES_FAILURE:
     case GET_SONGS_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.error
-      }
-    default: 
+        error: action.error,
+      };
+    default:
       return state;
   }
 }

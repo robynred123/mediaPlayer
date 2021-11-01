@@ -2,34 +2,66 @@ import {
   GET_SONGS,
   GET_SONGS_SUCCESS,
   GET_SONGS_FAILURE,
+  CREATE_TABLES,
+  CREATE_TABLES_SUCCESS,
+  CREATE_TABLES_FAILURE,
 } from "../util/constants";
-import MSSQL from "react-native-mssql";
-import { config } from "../util/config";
-import { getSongsDBConnect } from "../util/dbConnection";
+import * as SQLite from "expo-sqlite";
+
+const db = SQLite.openDatabase('db.mediaPlayer')
+
+export const createTables = () => {
+  return dispatch => {
+    dispatch({
+      type: CREATE_TABLES,
+    });
+    return db.transaction((tx) => {
+      tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS songs (songId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name STRING, artist STRING, location STRING );",
+        null,
+        (txObj, result) => {
+          dispatch({
+            type: CREATE_TABLES_SUCCESS,
+          });
+        },
+        (txObj, error) => {
+          console.log("Create Table Error ", error);
+          dispatch({
+            type: CREATE_TABLES_FAILURE,
+            error: "whooops",
+          });
+        }
+      );
+    });
+  };
+};
 
 export const getSongs = () => {
   return (dispatch) => {
     dispatch({
       type: GET_SONGS,
+    })
+    return db.transaction((tx) => {
+      // sending 4 arguments in executeSql
+      tx.executeSql(
+        "SELECT * FROM songs",
+        null, // passing sql query and parameters:null
+        // success callback which sends two things Transaction object and ResultSet Object
+        (txObj, { rows: { _array } }) => {
+          dispatch({
+            type: GET_SONGS_SUCCESS,
+            data: _array,
+          });
+        },
+        // failure callback which sends two things Transaction object and Error
+        (txObj, error) => {
+          dispatch({
+            type: GET_SONGS_FAILURE,
+            error: "whoops, no songs for you",
+          });
+        }
+      );
     });
-    console.log('woo')
-    try {
-      const result = getSongsDBConnect();
-      console.log('RESULT', result)
-      dispatch({
-        type: GET_SONGS_SUCCESS,
-        response: JSON.stringify(result),
-      });
-    } catch {
-      console.log('failure')
-      dispatch({
-        type: GET_SONGS_FAILURE,
-        error: "whoops",
-      });
-    }
-    MSSQL.close();
   };
 };
 
-export const getSongsSuccess = () => ({ type: GET_SONGS_SUCCESS, response });
-export const getSongsFailure = () => ({ type: GET_SONGS_FAILURE, error });
