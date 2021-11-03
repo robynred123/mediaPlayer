@@ -16,12 +16,6 @@ export const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case CREATE_TABLES:
-    case GET_SONGS:
-      return {
-        ...state,
-        loading: true,
-      };
     case CREATE_TABLES_SUCCESS:
       return {
         ...state,
@@ -33,6 +27,12 @@ export default function (state = initialState, action) {
         ...state,
         loading: false,
         songList: [{ id: "1", name: "ruby" }], //update
+      };
+    case CREATE_TABLES:
+    case GET_SONGS:
+      return {
+        ...state,
+        loading: true,
       };
     case CREATE_TABLES_FAILURE:
     case GET_SONGS_FAILURE:

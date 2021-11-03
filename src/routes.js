@@ -15,6 +15,7 @@ export const Routes = () => {
   const Tab = createBottomTabNavigator();
   const loadingSongs = useSelector(state => state?.songs?.loading)
   const tablesCreated = useSelector(state => state?.songs?.tablesCreated)
+  const songList = useSelector(state => state?.songs.songList)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -23,9 +24,10 @@ export const Routes = () => {
   
 
   useEffect(() => {
-    if(tablesCreated) {
+    if(tablesCreated && songList === null) {
       dispatch(getSongs())
     }
+    console.log(songList)
   }, [loadingSongs])
 
   return (

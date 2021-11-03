@@ -21,7 +21,7 @@ export const createTables = () => {
         null,
         (txObj, result) => {
           dispatch({
-            type: CREATE_TABLES_SUCCESS,
+            type: CREATE_TABLES_SUCCESS
           });
         },
         (txObj, error) => {
@@ -50,7 +50,7 @@ export const getSongs = () => {
         (txObj, { rows: { _array } }) => {
           dispatch({
             type: GET_SONGS_SUCCESS,
-            data: _array,
+            response: _array,
           });
         },
         // failure callback which sends two things Transaction object and Error
