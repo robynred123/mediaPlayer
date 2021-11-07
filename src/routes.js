@@ -6,7 +6,6 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { useSelector, useDispatch } from 'react-redux';
 import { View } from 'react-native'
 
-import { Home } from './screens/Home';
 import { Songs } from './screens/Songs';
 import { Playlists } from './screens/Playlists';
 import { createTables, getSongs } from '../src/actions/songs'
@@ -27,7 +26,6 @@ export const Routes = () => {
     if(tablesCreated && songList === null) {
       dispatch(getSongs())
     }
-    console.log(songList)
   }, [loadingSongs])
 
   return (
@@ -45,11 +43,7 @@ export const Routes = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'Home') {
-            iconName = focused
-              ? 'home'
-              : 'home-outline';
-          } else if (route.name === 'Songs') {
+          if (route.name === 'Songs') {
             iconName = focused ? 'musical-notes' : 'musical-notes-outline';
           }
           else if (route.name === 'Playlists') {
@@ -63,7 +57,6 @@ export const Routes = () => {
         tabBarInactiveTintColor: '#585858',
       })}
       >
-        <Tab.Screen name='Home' component={Home} />
         <Tab.Screen name='Songs' component={Songs} />
         <Tab.Screen name='Playlists' component={Playlists} />
       </Tab.Navigator>
