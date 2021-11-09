@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
-import { getSongs } from "../actions/songs";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
+
+import { getSongs } from "../actions/songs";
+import { showModal, hideModal } from "../actions/app";
+import { EditModal } from "../components/EditModal";
 
 export const Songs = () => {
   const [songs, setSongs] = useState([]);
   const songList = useSelector((state) => state?.songs.songList);
   const error = useSelector((state) => state?.songs.error);
+  const visible = useSelector((state) => state?.app?.visible);
+  const song = useSelector((state) => state?.app?.song);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,14 +36,14 @@ export const Songs = () => {
     <View style={styles.item}>
       <Text>{item.name}</Text>
       <View style={styles.iconContainer}>
-        <TouchableOpacity onClick={() => console.log("EDIT")}>
+        <TouchableOpacity onPress={() => dispatch(showModal(item))}>
           <Ionicons
             name={"brush"}
             size={20}
             style={styles.icons}
           />
         </TouchableOpacity>
-        <TouchableOpacity onClick={() => console.log("DELETE")}>
+        <TouchableOpacity onPress={() => console.log("DELETE")}>
           <Ionicons
             name={"trash"}
             size={20}
@@ -50,6 +55,11 @@ export const Songs = () => {
   );
 
   return (
+    <>
+     <View>
+        <EditModal visible={visible} onPress={() => dispatch(hideModal())} song={song}/>
+      </View>
+
     <SafeAreaView style={styles.content} edges={["bottom", "left", "right"]}>
       {songs ? (
         <FlatList
@@ -61,6 +71,7 @@ export const Songs = () => {
         <Text> Import a Song! </Text>
       )}
     </SafeAreaView>
+    </>
   );
 };
 
