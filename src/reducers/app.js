@@ -11,13 +11,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         visible: true,
-        song: action.payload
       };
     case HIDE_MODAL:
       return {
         ...state,
         visible: false,
-        song: null
       };
     default:
       return state;

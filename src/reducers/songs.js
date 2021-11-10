@@ -26,7 +26,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        songList: [{ id: "1", name: "ruby" }], //update
+        songList: [{ id: "1", name: "ruby", artist: "Kaiser Chiefs" }], //update
       };
     case CREATE_TABLES:
     case GET_SONGS:

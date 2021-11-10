@@ -1,7 +1,24 @@
-import React from "react";
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 
-export const EditModal = ({visible, onPress, song}) => {
+export const EditModal = ({ visible, onPress, song }) => {
+  const [name, setName] = useState(song?.name);
+  const [artist, setArtist] = useState(song?.artist);
+
+  console.log(song, name, artist);
+
+  useEffect(() => {
+    setName(song?.name)
+    setArtist(song?.artist)
+  }, [visible])
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -12,13 +29,36 @@ export const EditModal = ({visible, onPress, song}) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{song?.name}</Text>
+            <Text style={styles.formHeader}>Edit</Text>
+            <Text>Name: </Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={setName}
+              defaultValue={name}
+              value={name}
+            />
+
+            <Text>Artist: </Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={setArtist}
+              defaultValue={artist}
+              value={artist}
+            />
+
             <View>
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
                 onPress={onPress}
               >
                 <Text style={styles.textStyle}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={onPress}
+              >
+                <Text style={styles.textStyle}>Submit</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -29,6 +69,9 @@ export const EditModal = ({visible, onPress, song}) => {
 };
 
 const styles = StyleSheet.create({
+  content: {
+    padding: 20,
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -69,5 +112,8 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+  input: {
+    padding: 5,
   },
 });

@@ -11,10 +11,10 @@ import { EditModal } from "../components/EditModal";
 
 export const Songs = () => {
   const [songs, setSongs] = useState([]);
+  const [song, setSong] = useState(null)
   const songList = useSelector((state) => state?.songs.songList);
   const error = useSelector((state) => state?.songs.error);
   const visible = useSelector((state) => state?.app?.visible);
-  const song = useSelector((state) => state?.app?.song);
 
   const dispatch = useDispatch();
 
@@ -36,7 +36,10 @@ export const Songs = () => {
     <View style={styles.item}>
       <Text>{item.name}</Text>
       <View style={styles.iconContainer}>
-        <TouchableOpacity onPress={() => dispatch(showModal(item))}>
+        <TouchableOpacity onPress={() => {
+          setSong(item)
+          dispatch(showModal())
+          }}>
           <Ionicons
             name={"brush"}
             size={20}

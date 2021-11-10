@@ -3,11 +3,10 @@ import {
   HIDE_MODAL
 } from "../util/constants";
 
-export const showModal = (song) => {
+export const showModal = () => {
   return dispatch => {
     dispatch({
       type: SHOW_MODAL,
-      payload: song
     });
   }
 }
