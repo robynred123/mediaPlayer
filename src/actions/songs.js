@@ -65,3 +65,40 @@ export const getSongs = () => {
   };
 };
 
+export const addSong = ({name, artist, location, songs}) => {
+  db.transaction((tx) => {
+    tx.executeSql('INSERT INTO songs (name, artist, location) VALUES (?, ?, ?)', [name, artist, location],
+      (txObj, resultSet) => { return responseObj.data = songs.concat({ id: resultSet.insertId, ...testSong}) },
+      (txObj, error) => console.log('Error', error)
+    )
+  })
+}
+
+export const editSong = (song) => {
+  return (dispatch) => {
+    dispatch({
+      type: EDIT_SONG,
+    })
+    return db.transaction((tx) => {
+      // sending 4 arguments in executeSql
+      tx.executeSql(
+        tx.executeSql('UPDATE songs SET name = ?, artist = ? WHERE id = ?', [song.name, song.artist, song.songId],
+        null, 
+        // success callback which sends two things Transaction object and ResultSet Object
+        (txObj, { rows: { _array } }) => {
+          dispatch({
+            type: EDIT_SONG_SUCCESS,
+            response: _array,
+          });
+        },
+        // failure callback which sends two things Transaction object and Error
+        (txObj, error) => {
+          dispatch({
+            type: EDIT_SONG_FAILURE,
+            error: "whoops, no songs for you",
+          });
+        }
+      ))
+    });
+  };
+};

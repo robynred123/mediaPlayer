@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "react-native";
 
-export const EditModal = ({ visible, onPress, song }) => {
+export const EditModal = ({ visible, onCancel, onSubmit, song }) => {
   const [name, setName] = useState(song?.name);
   const [artist, setArtist] = useState(song?.artist);
 
@@ -49,14 +49,14 @@ export const EditModal = ({ visible, onPress, song }) => {
             <View>
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
-                onPress={onPress}
+                onPress={onCancel}
               >
                 <Text style={styles.textStyle}>Cancel</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
-                onPress={onPress}
+                onPress={onSubmit}
               >
                 <Text style={styles.textStyle}>Submit</Text>
               </TouchableOpacity>
