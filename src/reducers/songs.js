@@ -5,6 +5,9 @@ import {
   CREATE_TABLES,
   CREATE_TABLES_SUCCESS,
   CREATE_TABLES_FAILURE,
+  ADD_SONG,
+  ADD_SONG_SUCCESS,
+  ADD_SONG_FAILURE,
 } from "../util/constants";
 
 export const initialState = {
@@ -26,16 +29,24 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        songList: [{ id: "1", name: "ruby", artist: "Kaiser Chiefs" }], //update
+        songList: action.data//[{ id: "1", name: "ruby", artist: "Kaiser Chiefs" }], //update
       };
+    case ADD_SONG_SUCCESS:
+      return {
+        ...state, 
+        loading: false,
+        songList: songList.concat(...songList, action.data)
+      }
     case CREATE_TABLES:
     case GET_SONGS:
+    case ADD_SONG:
       return {
         ...state,
         loading: true,
       };
     case CREATE_TABLES_FAILURE:
     case GET_SONGS_FAILURE:
+    case ADD_SONG_FAILURE:
       return {
         ...state,
         loading: false,

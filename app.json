@@ -10,8 +10,14 @@
       "package": "mediaplayer.epa"
     },
     "ios": {
-      "bundleIdentifier": "mediaplayer.epa"
-    }
+      "bundleIdentifier": "mediaplayer.epa",
+      "usesIcloudStorage": true
+    },
+    "plugins": [
+      [
+        "expo-document-picker"
+      ]
+    ]
   },
   "name": "mediaPlayer"
 }

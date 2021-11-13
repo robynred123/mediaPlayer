@@ -5,13 +5,16 @@ import {
   CREATE_TABLES,
   CREATE_TABLES_SUCCESS,
   CREATE_TABLES_FAILURE,
+  ADD_SONG,
+  ADD_SONG_SUCCESS, 
+  ADD_SONG_FAILURE
 } from "../util/constants";
 import * as SQLite from "expo-sqlite";
 
-const db = SQLite.openDatabase('db.mediaPlayer')
+const db = SQLite.openDatabase("db.mediaPlayer");
 
 export const createTables = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: CREATE_TABLES,
     });
@@ -21,7 +24,7 @@ export const createTables = () => {
         null,
         (txObj, result) => {
           dispatch({
-            type: CREATE_TABLES_SUCCESS
+            type: CREATE_TABLES_SUCCESS,
           });
         },
         (txObj, error) => {
@@ -40,7 +43,7 @@ export const getSongs = () => {
   return (dispatch) => {
     dispatch({
       type: GET_SONGS,
-    })
+    });
     return db.transaction((tx) => {
       // sending 4 arguments in executeSql
       tx.executeSql(
@@ -65,40 +68,60 @@ export const getSongs = () => {
   };
 };
 
-export const addSong = ({name, artist, location, songs}) => {
-  db.transaction((tx) => {
-    tx.executeSql('INSERT INTO songs (name, artist, location) VALUES (?, ?, ?)', [name, artist, location],
-      (txObj, resultSet) => { return responseObj.data = songs.concat({ id: resultSet.insertId, ...testSong}) },
-      (txObj, error) => console.log('Error', error)
-    )
-  })
-}
+export const addSong = ({ name, artist, location }) => {
+  return (dispatch) => {
+    dispatch({
+      type: ADD_SONG,
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        "INSERT INTO songs (name, artist, location) VALUES (?, ?, ?)",
+        [name, artist, location],
+        (txObj, resultSet) => {
+          dispatch({
+            type: ADD_SONG_SUCCESS,
+            data: resultSet
+          })
+        },
+        (txObj, error) => {
+          dispatch({
+            type: ADD_SONGS_FAILURE,
+            error: "whoops, no songs for you",
+          });
+        }
+      );
+    });
+  };
+};
 
 export const editSong = (song) => {
   return (dispatch) => {
     dispatch({
       type: EDIT_SONG,
-    })
+    });
     return db.transaction((tx) => {
       // sending 4 arguments in executeSql
       tx.executeSql(
-        tx.executeSql('UPDATE songs SET name = ?, artist = ? WHERE id = ?', [song.name, song.artist, song.songId],
-        null, 
-        // success callback which sends two things Transaction object and ResultSet Object
-        (txObj, { rows: { _array } }) => {
-          dispatch({
-            type: EDIT_SONG_SUCCESS,
-            response: _array,
-          });
-        },
-        // failure callback which sends two things Transaction object and Error
-        (txObj, error) => {
-          dispatch({
-            type: EDIT_SONG_FAILURE,
-            error: "whoops, no songs for you",
-          });
-        }
-      ))
+        tx.executeSql(
+          "UPDATE songs SET name = ?, artist = ? WHERE id = ?",
+          [song.name, song.artist, song.songId],
+          null,
+          // success callback which sends two things Transaction object and ResultSet Object
+          (txObj, { rows: { _array } }) => {
+            dispatch({
+              type: EDIT_SONG_SUCCESS,
+              response: _array,
+            });
+          },
+          // failure callback which sends two things Transaction object and Error
+          (txObj, error) => {
+            dispatch({
+              type: EDIT_SONG_FAILURE,
+              error: "whoops, no songs for you",
+            });
+          }
+        )
+      );
     });
   };
 };

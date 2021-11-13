@@ -5,7 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { getSongs } from "../actions/songs";
+import { getSongs, editSong } from "../actions/songs";
 import { showModal, hideModal } from "../actions/app";
 import { EditModal } from "../components/EditModal";
 
@@ -60,7 +60,7 @@ export const Songs = () => {
   return (
     <>
      <View>
-        <EditModal visible={visible} onPress={() => dispatch(hideModal())} song={song}/>
+        <EditModal visible={visible} onSubmit={() => dispatch(editSong(), hideModal()) } onCancel={() => dispatch(hideModal())} song={song}/>
       </View>
 
     <SafeAreaView style={styles.content} edges={["bottom", "left", "right"]}>
