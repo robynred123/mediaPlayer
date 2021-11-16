@@ -6,9 +6,12 @@ import {
   CREATE_TABLES_SUCCESS,
   CREATE_TABLES_FAILURE,
   ADD_SONG,
-  ADD_SONG_SUCCESS, 
+  ADD_SONG_SUCCESS,
   ADD_SONG_FAILURE,
-  CLEAR_ADDED
+  CLEAR_CHANGED,
+  DELETE_SONG,
+  DELETE_SONG_SUCCESS,
+  DELETE_SONG_FAILURE,
 } from "../util/constants";
 import * as SQLite from "expo-sqlite";
 
@@ -45,18 +48,15 @@ export const getSongs = () => {
       type: GET_SONGS,
     });
     return db.transaction((tx) => {
-      // sending 4 arguments in executeSql
       tx.executeSql(
         "SELECT * FROM songs",
-        null, // passing sql query and parameters:null
-        // success callback which sends two things Transaction object and ResultSet Object
+        null,
         (txObj, { rows: { _array } }) => {
           dispatch({
             type: GET_SONGS_SUCCESS,
             response: _array,
           });
         },
-        // failure callback which sends two things Transaction object and Error
         (txObj, error) => {
           dispatch({
             type: GET_SONGS_FAILURE,
@@ -80,8 +80,8 @@ export const addSong = ({ name, artist, location }) => {
         (txObj, resultSet) => {
           dispatch({
             type: ADD_SONG_SUCCESS,
-            data: resultSet
-          })
+            data: resultSet,
+          });
         },
         (txObj, error) => {
           dispatch({
@@ -94,13 +94,13 @@ export const addSong = ({ name, artist, location }) => {
   };
 };
 
-export const clearAdded = () => {
+export const clearChanged = () => {
   return (dispatch) => {
     dispatch({
-      type: CLEAR_ADDED
-    })
-  }
-}
+      type: CLEAR_CHANGED,
+    });
+  };
+};
 
 export const editSong = (song) => {
   return (dispatch) => {
@@ -111,7 +111,7 @@ export const editSong = (song) => {
       // sending 4 arguments in executeSql
       tx.executeSql(
         tx.executeSql(
-          "UPDATE songs SET name = ?, artist = ? WHERE id = ?",
+          "UPDATE songs SET name = ?, artist = ? WHERE songId = ?",
           [song.name, song.artist, song.songId],
           null,
           // success callback which sends two things Transaction object and ResultSet Object
@@ -130,6 +130,38 @@ export const editSong = (song) => {
           }
         )
       );
+    });
+  };
+};
+
+export const deleteSong = (id) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_SONG,
+    });
+    return db.transaction((tx) => {
+        tx.executeSql(
+          "DELETE FROM songs WHERE songId = ?",
+          [id],
+          (txObj, resultSet) => {
+            if (resultSet.rowsAffected > 0) {
+              dispatch({
+                type: DELETE_SONG_SUCCESS,
+              });
+            } else {
+              dispatch({
+                type: DELETE_SONG_FAILURE,
+                error: "Failed to delete song",
+              });
+            }
+          },
+          (txObj, error) => {
+            dispatch({
+              type: DELETE_SONG_FAILURE,
+              error: "Failed to delete song",
+            });
+          }
+        )
     });
   };
 };

@@ -5,7 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { getSongs, editSong, clearAdded } from "../actions/songs";
+import { getSongs, editSong, clearChanged, deleteSong } from "../actions/songs";
 import { showModal, hideModal } from "../actions/app";
 import { EditModal } from "../components/EditModal";
 import { GREEN } from "../util/constants";
@@ -15,18 +15,18 @@ export const Songs = () => {
   const [song, setSong] = useState(null)
   const songList = useSelector((state) => state?.songs.songList);
   const error = useSelector((state) => state?.songs.error);
-  const songAdded = useSelector((state) => state?.songs.songAdded);
+  const songChanged = useSelector((state) => state?.songs.songChanged);
   const visible = useSelector((state) => state?.app?.visible);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getSongs());
-    console.log(songAdded, songList)
-    if(songAdded) {
-      dispatch(clearAdded())
+    console.log(songChanged, songList)
+    if(songChanged) {
+      dispatch(clearChanged())
     }
-  }, [songAdded]);
+  }, [songChanged]);
 
   useEffect(() => {
     if (songList) {
@@ -52,7 +52,7 @@ export const Songs = () => {
             style={styles.icons}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("DELETE")}>
+        <TouchableOpacity onPress={() => dispatch(deleteSong(item.songId))}>
           <Ionicons
             name={"trash"}
             size={20}
@@ -74,6 +74,7 @@ export const Songs = () => {
         <FlatList
           style={styles.flatList}
           data={songs}
+          keyExtractor={(item, index) => item.songId}
           renderItem={({ item }) => renderItem(item)}
         />
       ) : (
