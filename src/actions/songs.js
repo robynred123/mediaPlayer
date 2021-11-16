@@ -7,7 +7,8 @@ import {
   CREATE_TABLES_FAILURE,
   ADD_SONG,
   ADD_SONG_SUCCESS, 
-  ADD_SONG_FAILURE
+  ADD_SONG_FAILURE,
+  CLEAR_ADDED
 } from "../util/constants";
 import * as SQLite from "expo-sqlite";
 
@@ -28,7 +29,6 @@ export const createTables = () => {
           });
         },
         (txObj, error) => {
-          console.log("Create Table Error ", error);
           dispatch({
             type: CREATE_TABLES_FAILURE,
             error: "whooops",
@@ -85,7 +85,7 @@ export const addSong = ({ name, artist, location }) => {
         },
         (txObj, error) => {
           dispatch({
-            type: ADD_SONGS_FAILURE,
+            type: ADD_SONG_FAILURE,
             error: "whoops, no songs for you",
           });
         }
@@ -93,6 +93,14 @@ export const addSong = ({ name, artist, location }) => {
     });
   };
 };
+
+export const clearAdded = () => {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_ADDED
+    })
+  }
+}
 
 export const editSong = (song) => {
   return (dispatch) => {

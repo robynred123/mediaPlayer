@@ -8,6 +8,7 @@ import {
   ADD_SONG,
   ADD_SONG_SUCCESS,
   ADD_SONG_FAILURE,
+  CLEAR_ADDED
 } from "../util/constants";
 
 export const initialState = {
@@ -15,6 +16,7 @@ export const initialState = {
   loading: false,
   error: null,
   tablesCreated: false,
+  songAdded: false
 };
 
 export default function (state = initialState, action) {
@@ -29,13 +31,18 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: false,
-        songList: action.data//[{ id: "1", name: "ruby", artist: "Kaiser Chiefs" }], //update
+        songList: action.response//[{ id: "1", name: "ruby", artist: "Kaiser Chiefs" }] dummy data
       };
     case ADD_SONG_SUCCESS:
       return {
         ...state, 
-        loading: false,
-        songList: songList.concat(...songList, action.data)
+        songAdded: true
+      }
+    case CLEAR_ADDED: 
+      return {
+        ...state, 
+        loading: false, 
+        songAdded: false
       }
     case CREATE_TABLES:
     case GET_SONGS:

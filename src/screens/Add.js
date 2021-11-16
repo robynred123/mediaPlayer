@@ -1,78 +1,165 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import { useSelector, useDispatch } from "react-redux";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { addSong } from "../actions/songs";
+import { GREEN } from "../util/constants";
 
 export const Add = ({ navigation, route }) => {
   const history = route.params;
-  const [file, setFile] = useState(null);
-  const [uploading, startUploading] = useState(false);
+  const [file, setFile] = useState(false); //file to upload boolean
+  const [name, setName] = useState(null);
+  const [artist, setArtist] = useState(null);
+  const [uri, setUri] = useState(null);
 
   const dispatch = useDispatch();
 
-  const getMimeType = (ext) => {
-    // mime type mapping for few of the sample file types
-    switch (ext) {
-      case "mp3":
-        return "audio/mpeg";
-      case "jpg":
-        return "image/jpeg";
-    }
-  };
+  const clearState = () => {
+    setName(null)
+    setArtist(null)
+    setUri(null)
+    setFile(null)
+    navigation.navigate(history)
+  }
 
   const pickFile = async () => {
-    const mime = 'audio/*'
-    let result = await DocumentPicker.getDocumentAsync({type:'audio/mpeg'}); 
-    console.log(result);
-    //if (!result.cancelled) {
-      //setFile(result.uri);
-    //}
+    let result = await DocumentPicker.getDocumentAsync({ type: "audio/mpeg" });
+
+    if (!result.cancelled) {
+      setFile(true);
+      setName(result.name);
+      setUri(result.uri);
+    }
   };
 
   const uploadFile = async () => {
     if (file) {
-      const fileUri = file ? file : image;
-      let filename = fileUri.split("/").pop();
-      //let fileArtist =
-      const extArr = /\.(\w+)$/.exec(filename);
-      //const type = getMimeType(extArr[1]);
-      setFile(null);
-      startUploading(true);
-
       let song = {
-        name: filename,
-        //artist: fileArtist
-        location: fileUri,
+        name: name,
+        artist: artist,
+        location: uri,
       };
-      //let formData = new FormData();
 
-      //formData.append("filetoupload", { uri: fileUri, name: filename, type });
-
-      return dispatch(addSong(song));
+      dispatch(addSong(song));
+      clearState()
     }
   };
 
   const renderView = () => {
-    if (history === "songs") {
+    if (history === "Songs") {
       return (
-        <>
-          <TouchableOpacity onPress={() => pickFile()}>
-            <Text>Select a file</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => uploadFile()}>
-            <Text>Upload</Text>
-          </TouchableOpacity>
-        </>
+        <View style={styles.content}>
+          <View style={styles.selectFileContainer}>
+            <TextInput
+              style={styles.input}
+              disabled={true}
+              defaultValue={uri}
+            />
+            <TouchableOpacity onPress={() => pickFile()}>
+              <Ionicons
+                name={"folder"}
+                size={50}
+                style={styles.icons}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.title}>Edit</Text>
+          <Text>Name: </Text>
+          <TextInput
+              style={styles.input}
+              onChangeText={setName}
+              defaultValue={name}
+              value={name}
+            />
+
+            <Text>Artist:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={setArtist}
+              defaultValue={artist}
+              value={artist}
+            />
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.buttonCancel, styles.button]}
+              onPress={() => { clearState()}}
+            >
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.buttonUpload, styles.button]}
+              onPress={() => uploadFile()}
+            >
+              <Text>Upload</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       );
     }
   };
 
-  return (
-    <View>
-      <Text>Add</Text>
-      {renderView()}
-    </View>
-  );
+  return <View>{renderView()}</View>;
 };
+
+const styles = StyleSheet.create({
+  content: {
+    flexDirection: "column",
+    height: "100%",
+  },
+  selectFileContainer: {
+    flexDirection: "row",
+  },
+  inputContainer: {
+    padding: 10,
+  },
+  title: {
+    paddingTop: 10, 
+    textAlign: 'center',
+    fontSize: 24, 
+    fontWeight: 'bold'
+  },  
+  input: {
+    width: "80%",
+    borderWidth: 1,
+    padding: 5,
+    margin: 10,
+  },
+  icons: {
+    color: GREEN
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    bottom: 20,
+    paddingRight: "20%",
+    paddingLeft: "20%",
+    position: "absolute",
+    width: "100%",
+  },
+  button: {
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingRight: 25,
+    paddingLeft: 25,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  buttonUpload: {
+    backgroundColor: GREEN,
+  },
+  buttonCancel: {
+    color: GREEN,
+  },
+});

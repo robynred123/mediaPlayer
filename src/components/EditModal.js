@@ -12,8 +12,6 @@ export const EditModal = ({ visible, onCancel, onSubmit, song }) => {
   const [name, setName] = useState(song?.name);
   const [artist, setArtist] = useState(song?.artist);
 
-  console.log(song, name, artist);
-
   useEffect(() => {
     setName(song?.name)
     setArtist(song?.artist)

@@ -11,6 +11,7 @@ import { Songs } from "./screens/Songs";
 import { Playlists } from "./screens/Playlists";
 import { createTables, getSongs } from "../src/actions/songs";
 import { Add } from "./screens/Add";
+import { GREEN } from "./util/constants";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -31,7 +32,7 @@ const tabNav = ({ navigation }) => {
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#30C169",
+        tabBarActiveTintColor: GREEN,
         tabBarInactiveTintColor: "#585858",
       })}
     >
@@ -42,8 +43,8 @@ const tabNav = ({ navigation }) => {
           headerTitle: "Songs",
           headerRight: () => (
             <View style={{ alignItems: "flex-end", marginRight: 20 }}>
-              <TouchableOpacity onPress={() => navigation.navigate('Add', 'songs')}>
-                <Ionicons name={"add-circle"} size={40} color={"#30C169"} />
+              <TouchableOpacity onPress={() => navigation.navigate('Add', 'Songs')}>
+                <Ionicons name={"add-circle"} size={40} color={GREEN} />
               </TouchableOpacity>
             </View>
           ),
@@ -56,8 +57,8 @@ const tabNav = ({ navigation }) => {
           headerTitle: "Playlists",
           headerRight: () => (
             <View style={{ alignItems: "flex-end", marginRight: 20 }}>
-              <TouchableOpacity onPress={() => navigation.navigate('Add', 'playlists')}>
-                <Ionicons name={"add-circle"} size={40} color={"#30C169"} />
+              <TouchableOpacity onPress={() => navigation.navigate('Add', 'Playlists')}>
+                <Ionicons name={"add-circle"} size={40} color={GREEN} />
               </TouchableOpacity>
             </View>
           ),

@@ -5,22 +5,28 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { getSongs, editSong } from "../actions/songs";
+import { getSongs, editSong, clearAdded } from "../actions/songs";
 import { showModal, hideModal } from "../actions/app";
 import { EditModal } from "../components/EditModal";
+import { GREEN } from "../util/constants";
 
 export const Songs = () => {
   const [songs, setSongs] = useState([]);
   const [song, setSong] = useState(null)
   const songList = useSelector((state) => state?.songs.songList);
   const error = useSelector((state) => state?.songs.error);
+  const songAdded = useSelector((state) => state?.songs.songAdded);
   const visible = useSelector((state) => state?.app?.visible);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getSongs());
-  }, []);
+    console.log(songAdded, songList)
+    if(songAdded) {
+      dispatch(clearAdded())
+    }
+  }, [songAdded]);
 
   useEffect(() => {
     if (songList) {
@@ -81,17 +87,14 @@ export const Songs = () => {
 const styles = StyleSheet.create({
   content: {
     flexDirection: "column",
-    //backgroundColor: 'blue',
     height: "100%",
   },
   flatList: {
     padding: 20,
-    //backgroundColor: 'red',
     width: "100%",
     borderWidth: 0.5,
   },
   item: {
-    //backgroundColor: 'blue',
     flexDirection: "row",
     height: 30,
     alignContent: "center",
@@ -105,6 +108,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   icons: {
-    color: "#30C169",
+    color: GREEN,
   },
 });
