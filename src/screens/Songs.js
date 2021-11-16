@@ -28,6 +28,7 @@ export const Songs = () => {
     }
   }, [songChanged]);
 
+  console.log('test commit')
   useEffect(() => {
     if (songList) {
       if (songs) {
