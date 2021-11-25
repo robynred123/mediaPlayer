@@ -22,7 +22,6 @@ export const Songs = () => {
 
   useEffect(() => {
     dispatch(getSongs());
-    console.log(songChanged, songList)
     if(songChanged) {
       dispatch(clearChanged())
     }
