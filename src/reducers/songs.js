@@ -12,7 +12,9 @@ import {
   DELETE_SONG_FAILURE,
   DELETE_SONG,
   DELETE_SONG_SUCCESS, 
-
+  EDIT_SONG,
+  EDIT_SONG_SUCCESS,
+  EDIT_SONG_FAILURE
 } from "../util/constants";
 
 export const initialState = {
@@ -39,6 +41,7 @@ export default function (state = initialState, action) {
       };
     case DELETE_SONG_SUCCESS:
     case ADD_SONG_SUCCESS:
+    case EDIT_SONG_SUCCESS:
       return {
         ...state, 
         songChanged: true
@@ -53,6 +56,7 @@ export default function (state = initialState, action) {
     case GET_SONGS:
     case ADD_SONG:
     case DELETE_SONG:
+    case EDIT_SONG:
       return {
         ...state,
         loading: true,
@@ -61,6 +65,7 @@ export default function (state = initialState, action) {
     case GET_SONGS_FAILURE:
     case ADD_SONG_FAILURE:
     case DELETE_SONG_FAILURE:
+    case EDIT_SONG_FAILURE:
       return {
         ...state,
         loading: false,

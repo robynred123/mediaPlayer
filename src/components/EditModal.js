@@ -7,15 +7,25 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import { useDispatch } from "react-redux";
 
-export const EditModal = ({ visible, onCancel, onSubmit, song }) => {
+import { editSong } from '../actions/songs'
+import { hideModal } from "../actions/app";
+
+export const EditModal = ({ visible, song }) => {
   const [name, setName] = useState(song?.name);
   const [artist, setArtist] = useState(song?.artist);
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setName(song?.name)
     setArtist(song?.artist)
   }, [visible])
+
+  const submit = () => {
+    dispatch(editSong(song.songId, name, artist))
+    dispatch(hideModal())
+  }
 
   return (
     <View style={styles.centeredView}>
@@ -47,14 +57,14 @@ export const EditModal = ({ visible, onCancel, onSubmit, song }) => {
             <View>
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
-                onPress={onCancel}
+                onPress={() => dispatch(hideModal())}
               >
                 <Text style={styles.textStyle}>Cancel</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
-                onPress={onSubmit}
+                onPress={() => submit()}
               >
                 <Text style={styles.textStyle}>Submit</Text>
               </TouchableOpacity>

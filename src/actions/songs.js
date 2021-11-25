@@ -8,6 +8,9 @@ import {
   ADD_SONG,
   ADD_SONG_SUCCESS,
   ADD_SONG_FAILURE,
+  EDIT_SONG,
+  EDIT_SONG_SUCCESS,
+  EDIT_SONG_FAILURE,
   CLEAR_CHANGED,
   DELETE_SONG,
   DELETE_SONG_SUCCESS,
@@ -102,34 +105,34 @@ export const clearChanged = () => {
   };
 };
 
-export const editSong = (song) => {
+export const editSong = (id, name, artist) => {
   return (dispatch) => {
     dispatch({
       type: EDIT_SONG,
     });
     return db.transaction((tx) => {
-      // sending 4 arguments in executeSql
-      tx.executeSql(
         tx.executeSql(
           "UPDATE songs SET name = ?, artist = ? WHERE songId = ?",
-          [song.name, song.artist, song.songId],
-          null,
-          // success callback which sends two things Transaction object and ResultSet Object
-          (txObj, { rows: { _array } }) => {
-            dispatch({
-              type: EDIT_SONG_SUCCESS,
-              response: _array,
-            });
+          [name, artist, id],
+          (txObj, resultSet) => {
+            if (resultSet.rowsAffected > 0) {
+              dispatch({
+                type: EDIT_SONG_SUCCESS,
+              });
+            } else {
+              dispatch({
+                type: EDIT_SONG_FAILURE,
+                error: "Failed to update song",
+              });
+            }
           },
-          // failure callback which sends two things Transaction object and Error
           (txObj, error) => {
             dispatch({
               type: EDIT_SONG_FAILURE,
-              error: "whoops, no songs for you",
+              error: "Failed to update song",
             });
           }
-        )
-      );
+        );
     });
   };
 };

@@ -5,7 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { getSongs, editSong, clearChanged, deleteSong } from "../actions/songs";
+import { getSongs, clearChanged, deleteSong } from "../actions/songs";
 import { showModal, hideModal } from "../actions/app";
 import { EditModal } from "../components/EditModal";
 import { GREEN } from "../util/constants";
@@ -28,11 +28,10 @@ export const Songs = () => {
     }
   }, [songChanged]);
 
-  console.log('test commit')
   useEffect(() => {
     if (songList) {
       if (songs) {
-        if (songList.length !== songs.length) {
+        if (songList !== songs) {
           setSongs(songList);
         }
       } else setSongs(songList);
@@ -67,7 +66,12 @@ export const Songs = () => {
   return (
     <>
      <View>
-        <EditModal visible={visible} onSubmit={() => dispatch(editSong(), hideModal()) } onCancel={() => dispatch(hideModal())} song={song}/>
+        <EditModal 
+          visible={visible} 
+          closeModal={() => dispatch(hideModal())} 
+          song={song}
+          dispatch={dispatch}
+          />
       </View>
 
     <SafeAreaView style={styles.content} edges={["bottom", "left", "right"]}>
