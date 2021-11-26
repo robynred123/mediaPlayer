@@ -14,20 +14,21 @@ import { Audio } from "expo-av";
 import { GREEN } from "../util/constants";
 
 export const MusicPlayer = ({ selectedSong }) => {
-  const [play, setPlay] = useState(false); //boolean - play/pause
-  const [sound, setSound] = React.useState();
+  const [play, setPlay] = useState(true); //boolean - play/pause
+  const [sound, setSound] = React.useState(null);
 
   const playPause = () => {
     if (selectedSong !== null) {
       setPlay(!play);
+      if (play) {
+        playSound();
+      }
+      else {
+        Audio.Sound.pauseAsync()
+        setSound(null)
+      }
     }
   };
-
-  useEffect(() => {
-    if (play) {
-      playSound();
-    }
-  }, [play]);
 
   async function playSound() {
     console.log("Loading Sound");

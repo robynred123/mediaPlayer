@@ -38,9 +38,19 @@ export const Songs = () => {
     }
   }, [songList]);
 
+  const backgroundColor = (id) => {
+    if(id === selectedSong?.songId){
+      return {
+        ...styles.item,
+        backgroundColor: '#d7d8d9'
+      }
+    }
+    else return styles.item
+  }
+
   const renderItem = (item) => (
     <View>
-      <TouchableOpacity style={styles.item} onPress={() => dispatch(setSelectedSong(item))}>
+      <TouchableOpacity style={backgroundColor(item.songId)} onPress={() => dispatch(setSelectedSong(item))}>
       <Text>{item.name}</Text>
       <View style={styles.iconContainer}>
         <TouchableOpacity onPress={() => {
@@ -101,14 +111,14 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   flatList: {
-    paddingRight: 20,
-    paddingLeft: 20,
     width: "100%",
   },
   item: {
     flexDirection: "row",
     height: 30,
     alignContent: "center",
+    paddingRight: 20,
+    paddingLeft: 20,
   },
   iconContainer: {
     right: 0,
