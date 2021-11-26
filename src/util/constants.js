@@ -12,6 +12,7 @@ export const ADD_SONG_SUCCESS = 'ADD_SONG_SUCCESS';
 export const ADD_SONG_FAILURE = 'ADD_SONG_FAILURE';
 
 export const CLEAR_CHANGED = 'CLEAR_CHANGED';
+export const SELECT_SONG = 'SELECT_SONG';
 
 export const GET_SONGS = 'GET_SONGS';
 export const GET_SONGS_SUCCESS = 'GET_SONGS_SUCCESS';

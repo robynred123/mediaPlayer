@@ -14,7 +14,8 @@ import {
   DELETE_SONG_SUCCESS, 
   EDIT_SONG,
   EDIT_SONG_SUCCESS,
-  EDIT_SONG_FAILURE
+  EDIT_SONG_FAILURE,
+  SELECT_SONG
 } from "../util/constants";
 
 export const initialState = {
@@ -22,7 +23,8 @@ export const initialState = {
   loading: false,
   error: null,
   tablesCreated: false,
-  songChanged: false
+  songChanged: false,
+  selectedSong: null
 };
 
 export default function (state = initialState, action) {
@@ -39,6 +41,11 @@ export default function (state = initialState, action) {
         loading: false,
         songList: action.response//[{ id: "1", name: "ruby", artist: "Kaiser Chiefs" }] dummy data
       };
+    case SELECT_SONG: 
+      return {
+        ...state, 
+        selectedSong: action.payload
+      }
     case DELETE_SONG_SUCCESS:
     case ADD_SONG_SUCCESS:
     case EDIT_SONG_SUCCESS:

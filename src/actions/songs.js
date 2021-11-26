@@ -15,6 +15,7 @@ import {
   DELETE_SONG,
   DELETE_SONG_SUCCESS,
   DELETE_SONG_FAILURE,
+  SELECT_SONG
 } from "../util/constants";
 import * as SQLite from "expo-sqlite";
 
@@ -104,6 +105,15 @@ export const clearChanged = () => {
     });
   };
 };
+
+export const setSelectedSong = (song) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECT_SONG,
+      payload: song
+    })
+  }
+}
 
 export const editSong = (id, name, artist) => {
   return (dispatch) => {

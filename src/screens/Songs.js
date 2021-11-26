@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { getSongs, clearChanged, deleteSong } from "../actions/songs";
+import { getSongs, clearChanged, deleteSong, setSelectedSong } from "../actions/songs";
 import { showModal, hideModal } from "../actions/app";
 import { EditModal } from "../components/EditModal";
+import { MusicPlayer } from "../components/MusicPlayer";
 import { GREEN } from "../util/constants";
 
 export const Songs = () => {
@@ -16,6 +16,7 @@ export const Songs = () => {
   const songList = useSelector((state) => state?.songs.songList);
   const error = useSelector((state) => state?.songs.error);
   const songChanged = useSelector((state) => state?.songs.songChanged);
+  const selectedSong = useSelector((state) => state?.songs.selectedSong);
   const visible = useSelector((state) => state?.app?.visible);
 
   const dispatch = useDispatch();
@@ -38,7 +39,8 @@ export const Songs = () => {
   }, [songList]);
 
   const renderItem = (item) => (
-    <View style={styles.item}>
+    <View>
+      <TouchableOpacity style={styles.item} onPress={() => dispatch(setSelectedSong(item))}>
       <Text>{item.name}</Text>
       <View style={styles.iconContainer}>
         <TouchableOpacity onPress={() => {
@@ -59,6 +61,7 @@ export const Songs = () => {
           />
         </TouchableOpacity>
       </View>
+      </TouchableOpacity>
     </View>
   );
 
@@ -85,6 +88,9 @@ export const Songs = () => {
         <Text> Import a Song! </Text>
       )}
     </SafeAreaView>
+    <View style={styles.musicPlayer}>
+    <MusicPlayer selectedSong={selectedSong}/>
+    </View>
     </>
   );
 };
@@ -95,9 +101,9 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   flatList: {
-    padding: 20,
+    paddingRight: 20,
+    paddingLeft: 20,
     width: "100%",
-    borderWidth: 0.5,
   },
   item: {
     flexDirection: "row",
@@ -115,4 +121,8 @@ const styles = StyleSheet.create({
   icons: {
     color: GREEN,
   },
+  musicPlayer: {
+    position: 'absolute',
+    bottom: 0
+  }
 });

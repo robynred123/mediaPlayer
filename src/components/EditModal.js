@@ -54,7 +54,7 @@ export const EditModal = ({ visible, song }) => {
               value={artist}
             />
 
-            <View>
+            <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => dispatch(hideModal())}
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+    width: '70%',
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
@@ -124,4 +125,9 @@ const styles = StyleSheet.create({
   input: {
     padding: 5,
   },
+  buttonContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  }
 });
