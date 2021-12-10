@@ -15,7 +15,18 @@ import { GREEN } from "../util/constants";
 
 export const MusicPlayer = ({ selectedSong }) => {
   const [play, setPlay] = useState(true); //boolean - play/pause
-  const [sound, setSound] = React.useState(null);
+  const [loading, setLoading] = useState(false)
+  const [loadedSong, setLoadedSong] = useState(null)
+  const sound = React.useRef(new Audio.Sound());
+
+  let location = selectedSong?.location;
+
+  useEffect(() => {
+    if(loadedSong !== selectedSong) {
+      unloadSound();
+      loadAudio();
+    }
+  }, [selectedSong]);
 
   const playPause = () => {
     if (selectedSong !== null) {
@@ -24,25 +35,65 @@ export const MusicPlayer = ({ selectedSong }) => {
         playSound();
       }
       else {
-        Audio.Sound.pauseAsync()
-        setSound(null)
+        PauseSound()
       }
     }
   };
 
-  async function playSound() {
-    console.log("Loading Sound");
-      const location = selectedSong?.location;
-      console.log(location)
-      const music = await Audio.Sound.createAsync({ uri: location },
-      {
-        shouldPlay: true,
-      });
-      setSound(music);
+  const unloadSound = async () => {
+    await sound.current.unloadAsync();
+  };
 
-      console.log("Playing Sound");
-      await sound.playAsync();
-  }
+  const playSound = async () => {
+    try {
+      const result = await sound.current.getStatusAsync();
+      if (result.isLoaded) {
+        if (result.isPlaying === false) {
+          sound.current.playAsync();
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  const PauseSound = async () => {
+    try {
+      const result = await sound.current.getStatusAsync();
+      if (result.isLoaded) {
+        if (result.isPlaying === true) {
+          sound.current.pauseAsync();
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  const loadAudio = async () => {
+    setLoading(true);
+    const checkLoading = await sound.current.getStatusAsync();
+    if (checkLoading.isLoaded === false) {
+      try {
+        const result = await sound.current.loadAsync({uri: location}, true);
+        if (result.isLoaded === false) {
+          setLoading(false);
+          console.log('Error in Loading Audio');
+        } else {
+          setLoading(false);
+          setLoadedSong(selectedSong)
+          if(!play){ 
+            playSound()
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
