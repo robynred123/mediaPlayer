@@ -38,6 +38,32 @@ export const Songs = () => {
     }
   }, [songList]);
 
+  const onPressForward = () => {
+    if(songList && selectedSong) {
+      let currentSong = selectedSong.songId
+      let currentIndex = songList.findIndex((s) => s.songId === currentSong)
+      let nextSong = songList[currentIndex +1]
+      if(!nextSong) {
+        let firstSong = songList[0]
+        return dispatch(setSelectedSong(firstSong))
+      }
+      else dispatch(setSelectedSong(nextSong))
+    }
+  } 
+
+  const onPressBackward = () => {
+    if(songList && selectedSong) {
+      let currentSong = selectedSong.songId
+      let currentIndex = songList.findIndex((s) => s.songId === currentSong)
+      let nextSong = songList[currentIndex -1]
+      if(!nextSong) {
+        let lastSong = songList[songList.length - 1]
+        return dispatch(setSelectedSong(lastSong))
+      }
+      else dispatch(setSelectedSong(nextSong))
+    }
+  }
+
   const backgroundColor = (id) => {
     if(id === selectedSong?.songId){
       return {
@@ -99,7 +125,7 @@ export const Songs = () => {
       )}
     </SafeAreaView>
     <View style={styles.musicPlayer}>
-    <MusicPlayer selectedSong={selectedSong}/>
+    <MusicPlayer selectedSong={selectedSong} onPressForward={() => onPressForward()} onPressBackward={() => onPressBackward()}/>
     </View>
     </>
   );

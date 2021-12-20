@@ -13,7 +13,11 @@ import { Audio } from "expo-av";
 
 import { GREEN } from "../util/constants";
 
-export const MusicPlayer = ({ selectedSong }) => {
+export const MusicPlayer = ({ 
+  selectedSong, 
+  onPressForward, 
+  onPressBackward 
+}) => {
   const [play, setPlay] = useState(true); //boolean - play/pause
   const [loading, setLoading] = useState(false)
   const [loadedSong, setLoadedSong] = useState(null)
@@ -23,7 +27,7 @@ export const MusicPlayer = ({ selectedSong }) => {
 
   useEffect(() => {
     if(loadedSong !== selectedSong) {
-      unloadSound();
+      unloadSound()
       loadAudio();
     }
   }, [selectedSong]);
@@ -41,7 +45,7 @@ export const MusicPlayer = ({ selectedSong }) => {
   };
 
   const unloadSound = async () => {
-    await sound.current.unloadAsync();
+    await sound.current.unloadAsync()
   };
 
   const playSound = async () => {
@@ -92,6 +96,9 @@ export const MusicPlayer = ({ selectedSong }) => {
       }
     } else {
       setLoading(false);
+      if(!play){ 
+        playSound()
+      }
     }
   };
 
@@ -105,7 +112,7 @@ export const MusicPlayer = ({ selectedSong }) => {
         </View>
       )}
       <View style={styles.musicPlayer}>
-        <TouchableOpacity onPress={() => console.log("Back")}>
+        <TouchableOpacity onPress={onPressBackward}>
           <Ionicons name={"arrow-back"} size={25} style={styles.icons} />
         </TouchableOpacity>
 
@@ -117,7 +124,7 @@ export const MusicPlayer = ({ selectedSong }) => {
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => console.log("Forward")}>
+        <TouchableOpacity onPress={onPressForward}>
           <Ionicons name={"arrow-forward"} size={25} style={styles.icons} />
         </TouchableOpacity>
       </View>
