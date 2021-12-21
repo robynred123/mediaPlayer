@@ -12,15 +12,17 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Audio } from "expo-av";
 
 import { GREEN } from "../util/constants";
+import { setSongStatus } from "../actions/songs";
 
 export const MusicPlayer = ({ 
   selectedSong, 
   onPressForward, 
-  onPressBackward 
+  onPressBackward,
+  playing
 }) => {
-  const [play, setPlay] = useState(true); //boolean - play/pause
   const [loading, setLoading] = useState(false)
   const [loadedSong, setLoadedSong] = useState(null)
+  const dispatch = useDispatch()
   const sound = React.useRef(new Audio.Sound());
 
   let location = selectedSong?.location;
@@ -32,15 +34,18 @@ export const MusicPlayer = ({
     }
   }, [selectedSong]);
 
+  useEffect(() => {
+    if (playing) {
+      playSound();
+    }
+    else {
+      PauseSound()
+    }
+  }, [playing])
+
   const playPause = () => {
     if (selectedSong !== null) {
-      setPlay(!play);
-      if (play) {
-        playSound();
-      }
-      else {
-        PauseSound()
-      }
+      dispatch(setSongStatus(!playing))
     }
   };
 
@@ -86,7 +91,7 @@ export const MusicPlayer = ({
         } else {
           setLoading(false);
           setLoadedSong(selectedSong)
-          if(!play){ 
+          if(playing){ 
             playSound()
           }
         }
@@ -96,7 +101,7 @@ export const MusicPlayer = ({
       }
     } else {
       setLoading(false);
-      if(!play){ 
+      if(playing){ 
         playSound()
       }
     }
@@ -117,10 +122,10 @@ export const MusicPlayer = ({
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => playPause()}>
-          {play ? (
-            <Ionicons name={"play"} size={25} style={styles.icons} />
+          {playing ? (
+             <Ionicons name={"pause"} size={25} style={styles.icons} />
           ) : (
-            <Ionicons name={"pause"} size={25} style={styles.icons} />
+            <Ionicons name={"play"} size={25} style={styles.icons} />
           )}
         </TouchableOpacity>
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   View,
   Text,
@@ -9,8 +10,17 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { MusicPlayer } from "../components/MusicPlayer";
+import { onPressDirection } from "../util/musicPlayerActions";
 
 export const Playlists = () => {
+
+  const songList = useSelector((state) => state?.songs.songList);
+  const error = useSelector((state) => state?.songs.error);
+  const songChanged = useSelector((state) => state?.songs.songChanged);
+  const selectedSong = useSelector((state) => state?.songs.selectedSong);
+  const playing = useSelector((state) => state?.songs.playing);
+  const dispatch = useDispatch()
+
   return (
     <View>
       <SafeAreaView style={styles.content} edges={["bottom", "left", "right"]}>
@@ -18,7 +28,11 @@ export const Playlists = () => {
       </SafeAreaView>
 
       <View style={styles.musicPlayer}>
-        <MusicPlayer />
+      <MusicPlayer 
+        playing={playing} 
+        selectedSong={selectedSong} 
+        onPressForward={() => onPressDirection('forward', songList, selectedSong, dispatch)} 
+        onPressBackward={() => onPressDirection('backward', songList, selectedSong, dispatch)}/>
       </View>
     </View>
   );

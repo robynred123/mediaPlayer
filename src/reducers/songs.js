@@ -15,7 +15,8 @@ import {
   EDIT_SONG,
   EDIT_SONG_SUCCESS,
   EDIT_SONG_FAILURE,
-  SELECT_SONG
+  SELECT_SONG,
+  SET_SONG_STATUS
 } from "../util/constants";
 
 export const initialState = {
@@ -24,7 +25,8 @@ export const initialState = {
   error: null,
   tablesCreated: false,
   songChanged: false,
-  selectedSong: null
+  selectedSong: null,
+  playing: false
 };
 
 export default function (state = initialState, action) {
@@ -45,6 +47,11 @@ export default function (state = initialState, action) {
       return {
         ...state, 
         selectedSong: action.payload
+      }
+    case SET_SONG_STATUS: 
+      return {
+        ...state, 
+        playing: action.payload
       }
     case DELETE_SONG_SUCCESS:
     case ADD_SONG_SUCCESS:

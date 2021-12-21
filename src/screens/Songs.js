@@ -5,6 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { getSongs, clearChanged, deleteSong, setSelectedSong } from "../actions/songs";
+import { onPressDirection } from "../util/musicPlayerActions";
 import { showModal, hideModal } from "../actions/app";
 import { EditModal } from "../components/EditModal";
 import { MusicPlayer } from "../components/MusicPlayer";
@@ -17,6 +18,7 @@ export const Songs = () => {
   const error = useSelector((state) => state?.songs.error);
   const songChanged = useSelector((state) => state?.songs.songChanged);
   const selectedSong = useSelector((state) => state?.songs.selectedSong);
+  const playing = useSelector((state) => state?.songs.playing);
   const visible = useSelector((state) => state?.app?.visible);
 
   const dispatch = useDispatch();
@@ -31,38 +33,10 @@ export const Songs = () => {
   useEffect(() => {
     if (songList) {
       if (songs) {
-        if (songList !== songs) {
-          setSongs(songList);
-        }
-      } else setSongs(songList);
+        setSongs(songList);
+      }
     }
   }, [songList]);
-
-  const onPressForward = () => {
-    if(songList && selectedSong) {
-      let currentSong = selectedSong.songId
-      let currentIndex = songList.findIndex((s) => s.songId === currentSong)
-      let nextSong = songList[currentIndex +1]
-      if(!nextSong) {
-        let firstSong = songList[0]
-        return dispatch(setSelectedSong(firstSong))
-      }
-      else dispatch(setSelectedSong(nextSong))
-    }
-  } 
-
-  const onPressBackward = () => {
-    if(songList && selectedSong) {
-      let currentSong = selectedSong.songId
-      let currentIndex = songList.findIndex((s) => s.songId === currentSong)
-      let nextSong = songList[currentIndex -1]
-      if(!nextSong) {
-        let lastSong = songList[songList.length - 1]
-        return dispatch(setSelectedSong(lastSong))
-      }
-      else dispatch(setSelectedSong(nextSong))
-    }
-  }
 
   const backgroundColor = (id) => {
     if(id === selectedSong?.songId){
@@ -125,7 +99,11 @@ export const Songs = () => {
       )}
     </SafeAreaView>
     <View style={styles.musicPlayer}>
-    <MusicPlayer selectedSong={selectedSong} onPressForward={() => onPressForward()} onPressBackward={() => onPressBackward()}/>
+    <MusicPlayer 
+      playing={playing} 
+      selectedSong={selectedSong} 
+      onPressForward={() => onPressDirection('forward', songList, selectedSong, dispatch)} 
+      onPressBackward={() => onPressDirection('backward', songList, selectedSong, dispatch)}/>
     </View>
     </>
   );

@@ -15,7 +15,8 @@ import {
   DELETE_SONG,
   DELETE_SONG_SUCCESS,
   DELETE_SONG_FAILURE,
-  SELECT_SONG
+  SELECT_SONG,
+  SET_SONG_STATUS
 } from "../util/constants";
 import * as SQLite from "expo-sqlite";
 
@@ -178,3 +179,13 @@ export const deleteSong = (id) => {
     });
   };
 };
+
+
+export const setSongStatus = (status) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_SONG_STATUS,
+      payload: status
+    });
+  }
+}
