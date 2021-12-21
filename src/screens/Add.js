@@ -12,6 +12,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { addSong } from "../actions/songs";
 import { GREEN } from "../util/constants";
+import { addPlaylist } from "../actions/playlists";
 
 export const Add = ({ navigation, route }) => {
   const history = route.params;
@@ -23,11 +24,16 @@ export const Add = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const clearState = () => {
-    setName(null)
-    setArtist(null)
-    setUri(null)
-    setFile(null)
-    navigation.navigate(history)
+    setName(null);
+    setArtist(null);
+    setUri(null);
+    setFile(null);
+    navigation.navigate(history);
+  };
+
+  const createPlaylist = () => {
+    dispatch(addPlaylist(name))
+    clearState()
   }
 
   const pickFile = async () => {
@@ -49,7 +55,7 @@ export const Add = ({ navigation, route }) => {
       };
 
       dispatch(addSong(song));
-      clearState()
+      clearState();
     }
   };
 
@@ -64,17 +70,13 @@ export const Add = ({ navigation, route }) => {
               defaultValue={uri}
             />
             <TouchableOpacity onPress={() => pickFile()}>
-              <Ionicons
-                name={"folder"}
-                size={50}
-                style={styles.icons}
-              />
+              <Ionicons name={"folder"} size={50} style={styles.icons} />
             </TouchableOpacity>
           </View>
           <View style={styles.inputContainer}>
             <Text style={styles.title}>Edit</Text>
-          <Text>Name: </Text>
-          <TextInput
+            <Text>Name: </Text>
+            <TextInput
               style={styles.input}
               onChangeText={setName}
               defaultValue={name}
@@ -93,7 +95,9 @@ export const Add = ({ navigation, route }) => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={[styles.buttonCancel, styles.button]}
-              onPress={() => { clearState()}}
+              onPress={() => {
+                clearState();
+              }}
             >
               <Text>Cancel</Text>
             </TouchableOpacity>
@@ -103,6 +107,37 @@ export const Add = ({ navigation, route }) => {
               onPress={() => uploadFile()}
             >
               <Text>Upload</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.content}>
+          <View style={styles.inputContainer}>
+            <Text>Name: </Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={setName}
+              defaultValue={name}
+              value={name}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.buttonCancel, styles.button]}
+              onPress={() => {
+                clearState();
+              }}
+            >
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.buttonUpload, styles.button]}
+              onPress={() => createPlaylist()}
+            >
+              <Text>Create</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -125,11 +160,11 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    paddingTop: 10, 
-    textAlign: 'center',
-    fontSize: 24, 
-    fontWeight: 'bold'
-  },  
+    paddingTop: 10,
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
   input: {
     width: "80%",
     borderWidth: 1,
@@ -137,7 +172,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   icons: {
-    color: GREEN
+    color: GREEN,
   },
   buttonContainer: {
     flexDirection: "row",

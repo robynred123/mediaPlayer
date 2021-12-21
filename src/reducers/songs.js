@@ -2,9 +2,9 @@ import {
   GET_SONGS,
   GET_SONGS_SUCCESS,
   GET_SONGS_FAILURE,
-  CREATE_TABLES,
-  CREATE_TABLES_SUCCESS,
-  CREATE_TABLES_FAILURE,
+  CREATE_SONG_TABLE,
+  CREATE_SONG_TABLE_SUCCESS,
+  CREATE_SONG_TABLE_FAILURE,
   ADD_SONG,
   ADD_SONG_SUCCESS,
   ADD_SONG_FAILURE,
@@ -16,14 +16,17 @@ import {
   EDIT_SONG_SUCCESS,
   EDIT_SONG_FAILURE,
   SELECT_SONG,
-  SET_SONG_STATUS
+  SET_SONG_STATUS,
+  DROP_TABLES,
+  DROP_TABLES_SUCESS,
+  DROP_TABLES_FAILURE
 } from "../util/constants";
 
 export const initialState = {
   songList: null,
   loading: false,
   error: null,
-  tablesCreated: false,
+  songTableCreated: false,
   songChanged: false,
   selectedSong: null,
   playing: false
@@ -31,12 +34,18 @@ export const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case CREATE_TABLES_SUCCESS:
+    case CREATE_SONG_TABLE_SUCCESS:
       return {
         ...state,
         loading: false,
         tablesCreated: true,
       };
+    case DROP_TABLES_SUCESS: 
+      return {
+        ...state, 
+        loading: false, 
+        tablesCreated: false
+      }
     case GET_SONGS_SUCCESS:
       return {
         ...state,
@@ -66,7 +75,8 @@ export default function (state = initialState, action) {
         loading: false, 
         songChanged: false
       }
-    case CREATE_TABLES:
+    case CREATE_SONG_TABLE:
+    case DROP_TABLES:
     case GET_SONGS:
     case ADD_SONG:
     case DELETE_SONG:
@@ -75,7 +85,8 @@ export default function (state = initialState, action) {
         ...state,
         loading: true,
       };
-    case CREATE_TABLES_FAILURE:
+    case DROP_TABLES_FAILURE:
+    case CREATE_SONG_TABLE_FAILURE:
     case GET_SONGS_FAILURE:
     case ADD_SONG_FAILURE:
     case DELETE_SONG_FAILURE:

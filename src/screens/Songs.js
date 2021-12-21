@@ -103,7 +103,8 @@ export const Songs = () => {
       playing={playing} 
       selectedSong={selectedSong} 
       onPressForward={() => onPressDirection('forward', songList, selectedSong, dispatch)} 
-      onPressBackward={() => onPressDirection('backward', songList, selectedSong, dispatch)}/>
+      onPressBackward={() => onPressDirection('backward', songList, selectedSong, dispatch)}
+    />
     </View>
     </>
   );
