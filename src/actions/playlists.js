@@ -8,9 +8,6 @@ import {
   CREATE_PLAYLIST_TABLE,
   CREATE_PLAYLIST_TABLE_SUCCESS,
   CREATE_PLAYLIST_TABLE_FAILURE,
-  CREATE_PS_TABLE,
-  CREATE_PS_TABLE_SUCCESS,
-  CREATE_PS_TABLE_FAILURE
 } from "../util/constants";
 import * as SQLite from "expo-sqlite";
 
@@ -33,32 +30,6 @@ export const createPlaylistTable = () => {
         (txObj, error) => {
           dispatch({
             type: CREATE_PLAYLIST_TABLE_FAILURE,
-            error: "whooops",
-          });
-        }
-      );
-    });
-  };
-};
-
-export const createPSTable = () => {
-  return (dispatch) => {
-    dispatch({
-      type: CREATE_PS_TABLE,
-    });
-    return db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS playlistSongs (playlistId INTEGER PRIMARY KEY, songId INTEGER);",
-        null,
-        (txObj, result) => {
-          dispatch({
-            type: CREATE_PS_TABLE_SUCCESS,
-          });
-        },
-        (txObj, error) => {
-          console.log(error)
-          dispatch({
-            type: CREATE_PS_TABLE_FAILURE,
             error: "whooops",
           });
         }
@@ -119,3 +90,35 @@ export const addPlaylist = ( name ) => {
     });
   };
 };
+
+export const deletePlaylist = (id) => {
+  return (dispatch) => {
+    dispatch({
+      type: DELETE_PLAYLIST,
+    });
+    return db.transaction((tx) => {
+      tx.executeSql(
+        "DELETE FROM songs WHERE songId = ?",
+        [id],
+        (txObj, resultSet) => {
+          if (resultSet.rowsAffected > 0) {
+            dispatch({
+              type: DELETE_PLAYLIST_SUCCESS,
+            });
+          } else {
+            dispatch({
+              type: DELETE_PLAYLIST_FAILURE,
+              error: "Failed to delete song",
+            });
+          }
+        },
+        (txObj, error) => {
+          dispatch({
+            type: DELETE_PLAYLIST_FAILURE,
+            error: "Failed to delete song",
+          });
+        }
+      );
+    });
+  };
+}

@@ -14,7 +14,7 @@ import { MusicPlayer } from "../components/MusicPlayer";
 import { onPressDirection } from "../util/musicPlayerActions";
 import { getPlaylists } from "../actions/playlists";
 import { clearChanged } from "../actions/songs";
-import { GREEN } from "../util/constants";
+import { styles } from "./ScreenStyles";
 
 export const Playlists = () => {
   const songList = useSelector((state) => state?.songs.songList);
@@ -29,12 +29,19 @@ export const Playlists = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if(playlistsList !== playlists) {
-      dispatch(getPlaylists())
+    dispatch(getPlaylists());
+    if(playlistChanged) {
+      dispatch(clearChanged())
     }
-    setPlaylists(playlistsList)
-    dispatch(clearChanged())
-  }, [playlistChanged])
+  }, [playlistChanged]);
+
+  useEffect(() => {
+    if (playlistsList) {
+      if (playlists) {
+        setPlaylists(playlistsList);
+      }
+    }
+  }, [playlistsList]);
 
   const renderItem = (item) => (
     <View>
@@ -71,7 +78,7 @@ export const Playlists = () => {
         <FlatList
           style={styles.flatList}
           data={playlists}
-          keyExtractor={(item, index) => item.songId}
+          keyExtractor={(item, index) => item.playlistId}
           renderItem={({ item }) => renderItem(item)}
         />
       ) : (
@@ -90,35 +97,3 @@ export const Playlists = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  content: {
-    flexDirection: "column",
-    height: "100%",
-  },
-  flatList: {
-    width: "100%",
-  },
-  item: {
-    flexDirection: "row",
-    height: 30,
-    alignContent: "center",
-    paddingRight: 20,
-    paddingLeft: 20,
-  },
-  iconContainer: {
-    right: 0,
-    position: "absolute",
-    height: "100%",
-    width: "15%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  icons: {
-    color: GREEN,
-  },
-  musicPlayer: {
-    position: "absolute",
-    bottom: 0,
-  },
-});

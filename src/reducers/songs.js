@@ -67,7 +67,8 @@ export default function (state = initialState, action) {
     case EDIT_SONG_SUCCESS:
       return {
         ...state, 
-        songChanged: true
+        songChanged: true,
+        loading: false
       }
     case CLEAR_CHANGED: 
       return {

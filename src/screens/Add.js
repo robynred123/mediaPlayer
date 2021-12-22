@@ -52,6 +52,7 @@ export const Add = ({ navigation, route }) => {
         name: name,
         artist: artist,
         location: uri,
+        playlists: ""
       };
 
       dispatch(addSong(song));

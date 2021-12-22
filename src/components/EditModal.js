@@ -8,22 +8,50 @@ import {
   TextInput,
 } from "react-native";
 import { useDispatch } from "react-redux";
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { editSong } from '../actions/songs'
 import { hideModal } from "../actions/app";
 
-export const EditModal = ({ visible, song }) => {
+export const EditModal = ({ visible, song, playlists }) => {
   const [name, setName] = useState(song?.name);
   const [artist, setArtist] = useState(song?.artist);
+  const [chosenPlaylists, setChosenPlaylists] = useState([])
+  const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
 
   useEffect(() => {
     setName(song?.name)
     setArtist(song?.artist)
+    if(song !== null && 
+      song?.playlists !== "" && 
+      song?.playlists !== undefined
+      ) {
+      let playlistsToArray = JSON.parse(song?.playlists)
+      setChosenPlaylists(playlistsToArray)
+    }
+    
   }, [visible])
 
+  const updatePlaylists = (playlist) => {
+    if(chosenPlaylists.length > 0) {
+      let exists = chosenPlaylists.filter((c) => c.playlistId === playlist.playlistId)
+      if(exists) {
+        let index = chosenPlaylists.indexOf(exists)
+        let newArray = chosenPlaylists.splice(index)
+        setChosenPlaylists(newArray)
+      }
+      else {
+        let addTo = chosenPlaylists.push(playlist)
+        setChosenPlaylists(addTo)
+      }
+    }
+    else setChosenPlaylists(playlist)
+  }
+
   const submit = () => {
-    dispatch(editSong(song.songId, name, artist))
+    let formattedPlaylists = JSON.stringify(chosenPlaylists)
+    dispatch(editSong(song.songId, name, artist, formattedPlaylists))
     dispatch(hideModal())
   }
 
@@ -53,6 +81,26 @@ export const EditModal = ({ visible, song }) => {
               defaultValue={artist}
               value={artist}
             />
+
+            {playlists.length > 0 && (
+              <View style={styles.playlistsBox}>
+              <Text>Playlists: </Text>
+              <DropDownPicker
+              open={open}
+              value={chosenPlaylists}
+              multiple={true}
+              items={playlists}
+              schema={{
+                label: 'name',
+                value: 'playlistId'
+              }}
+              setOpen={() => setOpen(!open)}
+              zIndex={3000}
+              zIndexInverse={1000}
+              setValue={(p) => updatePlaylists(p)}
+            />
+            </View>
+            )}
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity
@@ -101,6 +149,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    height: '50%'
   },
   button: {
     borderRadius: 20,
@@ -128,6 +177,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    bottom: 20,
+    position: 'absolute',
+    zIndex: 1
   }
 });

@@ -10,7 +10,7 @@ import { TouchableOpacity, View } from "react-native";
 import { Songs } from "./screens/Songs";
 import { Playlists } from "./screens/Playlists";
 import { createSongTable, createTables, dropTables, getSongs } from "../src/actions/songs";
-import { createPlaylistTable, createPSTable ,getPlaylists } from "../src/actions/playlists";
+import { createPlaylistTable, getPlaylists } from "../src/actions/playlists";
 import { Add } from "./screens/Add";
 import { GREEN } from "./util/constants";
 
@@ -80,20 +80,16 @@ export const Routes = () => {
   const loadingSongs = useSelector((state) => state?.songs?.loading);
   const songTableCreated = useSelector((state) => state?.songs?.songTableCreated);
   const playlistTableCreated = useSelector((state) => state?.playlists?.playlistTableCreated);
-  const psTableCreated = useSelector((state) => state?.playlists?.pslistTableCreated);
   const songList = useSelector((state) => state?.songs.songList);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //create db tables for songs, playlists, playlistsongs
+    //create db tables for songs & playlists
     if(!songTableCreated) {
       dispatch(createSongTable());
     }
     if(!playlistTableCreated) {
       dispatch(createPlaylistTable())
-    }
-    if(!psTableCreated) {
-      dispatch(createPSTable())
     }
   }, [songTableCreated]);
 

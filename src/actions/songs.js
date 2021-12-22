@@ -32,7 +32,7 @@ export const createSongTable = () => {
     });
     return db.transaction((tx) => {
       tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS songs (songId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name STRING, artist STRING, location STRING);",
+        "CREATE TABLE IF NOT EXISTS songs (songId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name STRING, artist STRING, location STRING, playlists STRING);",
         null,
         (txObj, result) => {
           dispatch({
@@ -101,15 +101,15 @@ export const getSongs = () => {
   };
 };
 
-export const addSong = ({ name, artist, location }) => {
+export const addSong = ({ name, artist, location, playlists }) => {
   return (dispatch) => {
     dispatch({
       type: ADD_SONG,
     });
     db.transaction((tx) => {
       tx.executeSql(
-        "INSERT INTO songs (name, artist, location) VALUES (?, ?, ?)",
-        [name, artist, location],
+        "INSERT INTO songs (name, artist, location, playlists) VALUES (?, ?, ?, ?)",
+        [name, artist, location, playlists],
         (txObj, resultSet) => {
           dispatch({
             type: ADD_SONG_SUCCESS,
@@ -144,15 +144,15 @@ export const setSelectedSong = (song) => {
   };
 };
 
-export const editSong = (id, name, artist) => {
+export const editSong = (id, name, artist, playlists) => {
   return (dispatch) => {
     dispatch({
       type: EDIT_SONG,
     });
     return db.transaction((tx) => {
       tx.executeSql(
-        "UPDATE songs SET name = ?, artist = ? WHERE songId = ?",
-        [name, artist, id],
+        "UPDATE songs SET name = ?, artist = ?, playlists = ? WHERE songId = ?",
+        [name, artist, playlists, id],
         (txObj, resultSet) => {
           if (resultSet.rowsAffected > 0) {
             dispatch({
@@ -166,6 +166,7 @@ export const editSong = (id, name, artist) => {
           }
         },
         (txObj, error) => {
+          console.log(error)
           dispatch({
             type: EDIT_SONG_FAILURE,
             error: "Failed to update song",

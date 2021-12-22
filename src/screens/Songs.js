@@ -9,7 +9,7 @@ import { onPressDirection } from "../util/musicPlayerActions";
 import { showModal, hideModal } from "../actions/app";
 import { EditModal } from "../components/EditModal";
 import { MusicPlayer } from "../components/MusicPlayer";
-import { GREEN } from "../util/constants";
+import { styles } from "./ScreenStyles";
 
 export const Songs = () => {
   const [songs, setSongs] = useState([]);
@@ -20,6 +20,7 @@ export const Songs = () => {
   const selectedSong = useSelector((state) => state?.songs.selectedSong);
   const playing = useSelector((state) => state?.songs.playing);
   const visible = useSelector((state) => state?.app?.visible);
+  const playlists = useSelector((state) => state?.playlists?.playlists)
 
   const dispatch = useDispatch();
 
@@ -83,6 +84,7 @@ export const Songs = () => {
           closeModal={() => dispatch(hideModal())} 
           song={song}
           dispatch={dispatch}
+          playlists={playlists}
           />
       </View>
 
@@ -109,35 +111,3 @@ export const Songs = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  content: {
-    flexDirection: "column",
-    height: "100%",
-  },
-  flatList: {
-    width: "100%",
-  },
-  item: {
-    flexDirection: "row",
-    height: 30,
-    alignContent: "center",
-    paddingRight: 20,
-    paddingLeft: 20,
-  },
-  iconContainer: {
-    right: 0,
-    position: "absolute",
-    height: "100%",
-    width: "15%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  icons: {
-    color: GREEN,
-  },
-  musicPlayer: {
-    position: 'absolute',
-    bottom: 0
-  }
-});
