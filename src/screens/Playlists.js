@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { MusicPlayer } from "../components/MusicPlayer";
 import { onPressDirection } from "../util/musicPlayerActions";
-import { getPlaylists } from "../actions/playlists";
+import { getPlaylists, deletePlaylist } from "../actions/playlists";
 import { clearChanged } from "../actions/songs";
 import { styles } from "./ScreenStyles";
 
@@ -22,7 +22,7 @@ export const Playlists = () => {
   const selectedSong = useSelector((state) => state?.songs.selectedSong);
   const playing = useSelector((state) => state?.songs.playing);
   const playlistsList = useSelector((state) => state?.playlists.playlists); //list of playlists
-  const playlistChanged = useSelector((state) => state?.playlists.playlistChanged) 
+  const playlistChanged = useSelector((state) => state?.playlists.playlistsChanged); //if add, edit, or delete
 
   const [playlists, setPlaylists] = useState([])
 
@@ -37,7 +37,7 @@ export const Playlists = () => {
 
   useEffect(() => {
     if (playlistsList) {
-      if (playlists) {
+      if (playlistsList !== playlists) {
         setPlaylists(playlistsList);
       }
     }
@@ -48,18 +48,7 @@ export const Playlists = () => {
       <TouchableOpacity style={styles.item}>
       <Text>{item.name}</Text>
       <View style={styles.iconContainer}>
-        <TouchableOpacity onPress={() => {
-          //setPlaylist(item)
-          //dispatch(showModal())
-          console.log('edit playlist')
-          }}>
-          <Ionicons
-            name={"brush"}
-            size={20}
-            style={styles.icons}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity /*onPress={() => dispatch(deletePlaylist(item.playlistId))}*/>
+        <TouchableOpacity onPress={() => dispatch(deletePlaylist(item.playlistId))}>
           <Ionicons
             name={"trash"}
             size={20}

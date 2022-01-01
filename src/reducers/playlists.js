@@ -8,7 +8,10 @@ import {
   ADD_PLAYLIST,
   ADD_PLAYLIST_SUCCESS,
   ADD_PLAYLIST_FAILURE,
-  CLEAR_CHANGED
+  CLEAR_CHANGED,
+  DELETE_PLAYLIST,
+  DELETE_PLAYLIST_SUCCESS,
+  DELETE_PLAYLIST_FAILURE
 } from "../util/constants";
 
 export const initialState = {
@@ -35,6 +38,7 @@ export default function (state = initialState, action) {
         playlists: action.response
       }
       break;
+    case DELETE_PLAYLIST_SUCCESS:
     case ADD_PLAYLIST_SUCCESS:
       return {
         ...state,
@@ -49,6 +53,7 @@ export default function (state = initialState, action) {
       }
       break;
     //loading states
+    case DELETE_PLAYLIST:
     case CREATE_PLAYLIST_TABLE:
     case ADD_PLAYLIST:
     case GET_PLAYLISTS:
@@ -58,6 +63,7 @@ export default function (state = initialState, action) {
       };
       break;
     //failures
+    case DELETE_PLAYLIST_FAILURE:
     case CREATE_PLAYLIST_TABLE_FAILURE:
     case ADD_PLAYLIST_FAILURE:
     case GET_PLAYLISTS_FAILURE: 

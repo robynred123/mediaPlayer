@@ -45,9 +45,10 @@ const tabNav = ({ navigation }) => {
           headerTitle: "Songs",
           headerRight: () => (
             <View style={{ alignItems: "flex-end", marginRight: 20 }}>
+               {/* For debugging - drops tables - allowing them to be recreated
               <TouchableOpacity onPress={() => dispatch(dropTables())}>
                 <Ionicons name={"remove-circle"} size={40} color={GREEN} />
-              </TouchableOpacity>
+              </TouchableOpacity>*/}
               <TouchableOpacity onPress={() => navigation.navigate('Add', 'Songs')}>
                 <Ionicons name={"add-circle"} size={40} color={GREEN} />
               </TouchableOpacity>
@@ -62,9 +63,10 @@ const tabNav = ({ navigation }) => {
           headerTitle: "Playlists",
           headerRight: () => (
             <View style={{ alignItems: "flex-end", marginRight: 20 }}>
+              {/* For debugging - drops tables - allowing them to be recreated
               <TouchableOpacity onPress={() => dispatch(dropTables())}>
                 <Ionicons name={"remove-circle"} size={40} color={GREEN} />
-              </TouchableOpacity>
+              </TouchableOpacity>*/}
               <TouchableOpacity onPress={() => navigation.navigate('Add', 'Playlists')}>
                 <Ionicons name={"add-circle"} size={40} color={GREEN} />
               </TouchableOpacity>
@@ -81,6 +83,7 @@ export const Routes = () => {
   const songTableCreated = useSelector((state) => state?.songs?.songTableCreated);
   const playlistTableCreated = useSelector((state) => state?.playlists?.playlistTableCreated);
   const songList = useSelector((state) => state?.songs.songList);
+  const playlistsList = useSelector((state) => state?.playlists?.playlists);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -96,8 +99,9 @@ export const Routes = () => {
   useEffect(() => {
     if (songTableCreated && songList === null) {
       dispatch(getSongs());
+    }
+    if(playlistTableCreated && playlistsList === null) {
       dispatch(getPlaylists());
-      //getPS
     }
   }, [loadingSongs]);
 

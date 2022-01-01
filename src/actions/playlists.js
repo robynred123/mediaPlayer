@@ -8,6 +8,9 @@ import {
   CREATE_PLAYLIST_TABLE,
   CREATE_PLAYLIST_TABLE_SUCCESS,
   CREATE_PLAYLIST_TABLE_FAILURE,
+  DELETE_PLAYLIST,
+  DELETE_PLAYLIST_SUCCESS,
+  DELETE_PLAYLIST_FAILURE
 } from "../util/constants";
 import * as SQLite from "expo-sqlite";
 
@@ -98,7 +101,7 @@ export const deletePlaylist = (id) => {
     });
     return db.transaction((tx) => {
       tx.executeSql(
-        "DELETE FROM songs WHERE songId = ?",
+        "DELETE FROM playlists WHERE playlistId = ?",
         [id],
         (txObj, resultSet) => {
           if (resultSet.rowsAffected > 0) {

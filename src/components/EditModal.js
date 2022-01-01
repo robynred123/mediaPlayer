@@ -17,6 +17,7 @@ export const EditModal = ({ visible, song, playlists }) => {
   const [name, setName] = useState(song?.name);
   const [artist, setArtist] = useState(song?.artist);
   const [chosenPlaylists, setChosenPlaylists] = useState([])
+  const [tempPlaylists, setTempPlaylists] = useState([])
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
 
@@ -33,7 +34,22 @@ export const EditModal = ({ visible, song, playlists }) => {
     
   }, [visible])
 
+  useEffect(() => {
+    if(chosenPlaylists.length > 0) {
+      chosenPlaylists.map((c) => {
+        let exists = playlists.filter((p) => p.playlistId === c.playlistId)
+        if(!exists) {
+          let index = chosenPlaylists.indexOf(c)
+          let newArray = chosenPlaylists.splice(index)
+          setTempPlaylists(newArray)
+        }
+      })
+    }
+  }, [chosenPlaylists])
+
+  //these aren't working. Add error handling & play playlists
   const updatePlaylists = (playlist) => {
+    console.log('PLAYLIST', playlist)
     if(chosenPlaylists.length > 0) {
       let exists = chosenPlaylists.filter((c) => c.playlistId === playlist.playlistId)
       if(exists) {
@@ -53,6 +69,15 @@ export const EditModal = ({ visible, song, playlists }) => {
     let formattedPlaylists = JSON.stringify(chosenPlaylists)
     dispatch(editSong(song.songId, name, artist, formattedPlaylists))
     dispatch(hideModal())
+  }
+
+  const cancel = () => {
+    if(tempPlaylists.length > 0) {
+      setChosenPlaylists(tempPlaylists)
+      setTempPlaylists([])
+      submit()
+    }
+    else dispatch(hideModal())
   }
 
   return (
@@ -97,7 +122,7 @@ export const EditModal = ({ visible, song, playlists }) => {
               setOpen={() => setOpen(!open)}
               zIndex={3000}
               zIndexInverse={1000}
-              setValue={(p) => updatePlaylists(p)}
+              setValue={(e) => { updatePlaylists(e)}}
             />
             </View>
             )}
@@ -105,7 +130,7 @@ export const EditModal = ({ visible, song, playlists }) => {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => dispatch(hideModal())}
+                onPress={() => cancel()}
               >
                 <Text style={styles.textStyle}>Cancel</Text>
               </TouchableOpacity>
