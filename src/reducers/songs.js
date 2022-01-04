@@ -44,7 +44,7 @@ export default function (state = initialState, action) {
       return {
         ...state, 
         loading: false, 
-        tablesCreated: false
+        songTableCreated: false,
       }
     case GET_SONGS_SUCCESS:
       return {

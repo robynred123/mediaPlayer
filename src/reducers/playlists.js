@@ -11,7 +11,8 @@ import {
   CLEAR_CHANGED,
   DELETE_PLAYLIST,
   DELETE_PLAYLIST_SUCCESS,
-  DELETE_PLAYLIST_FAILURE
+  DELETE_PLAYLIST_FAILURE,
+  DROP_TABLES_SUCESS
 } from "../util/constants";
 
 export const initialState = {
@@ -31,6 +32,13 @@ export default function (state = initialState, action) {
         playlistTableCreated: true
       }
       break;
+      case DROP_TABLES_SUCESS: 
+      return {
+        ...state, 
+        loading: false, 
+        playlistTableCreated: false,
+      }
+    break;
     case GET_PLAYLISTS_SUCCESS: 
       return {
         ...state,

@@ -57,7 +57,7 @@ export const dropTables = () => {
     });
     return db.transaction((tx) => {
       tx.executeSql(
-        "DROP TABLE IF EXISTS songs; DROP TABLE IF EXISTS playlists; DROP TABLE IF EXISTS playlistSongs;",
+        "DROP TABLE IF EXISTS songs; DROP TABLE IF EXISTS playlists;",
         null,
         (txObj, result) => {
           dispatch({

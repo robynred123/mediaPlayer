@@ -63,10 +63,6 @@ const tabNav = ({ navigation }) => {
           headerTitle: "Playlists",
           headerRight: () => (
             <View style={{ alignItems: "flex-end", marginRight: 20 }}>
-              {/* For debugging - drops tables - allowing them to be recreated
-              <TouchableOpacity onPress={() => dispatch(dropTables())}>
-                <Ionicons name={"remove-circle"} size={40} color={GREEN} />
-              </TouchableOpacity>*/}
               <TouchableOpacity onPress={() => navigation.navigate('Add', 'Playlists')}>
                 <Ionicons name={"add-circle"} size={40} color={GREEN} />
               </TouchableOpacity>
@@ -94,7 +90,7 @@ export const Routes = () => {
     if(!playlistTableCreated) {
       dispatch(createPlaylistTable())
     }
-  }, [songTableCreated]);
+  }, [songTableCreated, playlistTableCreated]);
 
   useEffect(() => {
     if (songTableCreated && songList === null) {
