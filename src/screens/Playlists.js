@@ -15,6 +15,7 @@ import { onPressDirection } from "../util/musicPlayerActions";
 import { getPlaylists, deletePlaylist } from "../actions/playlists";
 import { clearChanged } from "../actions/songs";
 import { styles } from "./ScreenStyles";
+import { Item } from "../components/Item";
 
 export const Playlists = () => {
   const songList = useSelector((state) => state?.songs.songList);
@@ -44,20 +45,12 @@ export const Playlists = () => {
   }, [playlistsList]);
 
   const renderItem = (item) => (
-    <View>
-      <TouchableOpacity style={styles.item}>
-      <Text>{item.name}</Text>
-      <View style={styles.iconContainer}>
-        <TouchableOpacity onPress={() => dispatch(deletePlaylist(item.playlistId))}>
-          <Ionicons
-            name={"trash"}
-            size={20}
-            style={styles.icons}
-          />
-        </TouchableOpacity>
-      </View>
-      </TouchableOpacity>
-    </View>
+    <Item 
+      item={item}
+      onPress={() => console.log('pressed!')/*dispatch(setSelectedPlaylist(item))*/}
+      onDelete={() => dispatch(deletePlaylist(item.playlistId))}
+      selectedSong={selectedSong || null}
+    />
   );
 
   return (

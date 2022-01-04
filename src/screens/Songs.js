@@ -7,6 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { getSongs, clearChanged, deleteSong, setSelectedSong } from "../actions/songs";
 import { onPressDirection } from "../util/musicPlayerActions";
 import { showModal, hideModal } from "../actions/app";
+import { Item } from "../components/Item";
 import { EditModal } from "../components/EditModal";
 import { MusicPlayer } from "../components/MusicPlayer";
 import { styles } from "./ScreenStyles";
@@ -39,41 +40,14 @@ export const Songs = () => {
     }
   }, [songList]);
 
-  const backgroundColor = (id) => {
-    if(id === selectedSong?.songId){
-      return {
-        ...styles.item,
-        backgroundColor: '#d7d8d9'
-      }
-    }
-    else return styles.item
-  }
-
   const renderItem = (item) => (
-    <View>
-      <TouchableOpacity style={backgroundColor(item.songId)} onPress={() => dispatch(setSelectedSong(item))}>
-      <Text>{item.name}</Text>
-      <View style={styles.iconContainer}>
-        <TouchableOpacity onPress={() => {
-          setSong(item)
-          dispatch(showModal())
-          }}>
-          <Ionicons
-            name={"brush"}
-            size={20}
-            style={styles.icons}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => dispatch(deleteSong(item.songId))}>
-          <Ionicons
-            name={"trash"}
-            size={20}
-            style={styles.icons}
-          />
-        </TouchableOpacity>
-      </View>
-      </TouchableOpacity>
-    </View>
+    <Item 
+      item={item}
+      onPress={() => dispatch(setSelectedSong(item)) }
+      onEdit={() => { setSong(item), dispatch(showModal())} } 
+      onDelete={() => dispatch(deleteSong(item.songId))}
+      selectedSong={selectedSong || null}
+    />
   );
 
   return (

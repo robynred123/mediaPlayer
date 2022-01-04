@@ -80,23 +80,26 @@ export const EditModal = ({ visible, song, playlists }) => {
   //change list of Ids to list of playlists on submit
   const mapPlaylists = () => {
     let newPlaylists = [];
-    if (chosenPlaylists.length > 1) {
-      chosenPlaylists.map((c) => {
-        let selectedPlaylist = playlists.filter((p) => p.playlistId === c);
+    if (chosenPlaylists) {
+      if (chosenPlaylists.length > 1) {
+        chosenPlaylists.map((c) => {
+          let selectedPlaylist = playlists.filter((p) => p.playlistId === c);
+          let index = playlists.indexOf(selectedPlaylist[0]);
+          if (index !== undefined || index !== -1) {
+            newPlaylists.push(playlists[index]);
+          }
+        });
+      } else if (chosenPlaylists.length === 1) {
+        let selectedPlaylist = playlists.filter(
+          (p) => p.playlistId === chosenPlaylists[0]
+        );
         let index = playlists.indexOf(selectedPlaylist[0]);
         if (index !== undefined || index !== -1) {
           newPlaylists.push(playlists[index]);
         }
-      });
-    } else if (chosenPlaylists.length === 1) {
-      let selectedPlaylist = playlists.filter(
-        (p) => p.playlistId === chosenPlaylists[0]
-      );
-      let index = playlists.indexOf(selectedPlaylist[0]);
-      if (index !== undefined || index !== -1) {
-        newPlaylists.push(playlists[index]);
       }
     }
+
     return newPlaylists;
   };
 
