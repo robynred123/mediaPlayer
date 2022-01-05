@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { MusicPlayer } from "../components/MusicPlayer";
 import { onPressDirection } from "../util/musicPlayerActions";
-import { clearChanged, setSelectedSong } from "../actions/songs";
+import { clearChanged, setSelectedSong, editSong, getSongs } from "../actions/songs";
 import { styles } from "./ScreenStyles";
 import { Item } from "../components/Item";
 
@@ -16,9 +16,11 @@ export const PlaylistSongs = ({route}) => {
   const songChanged = useSelector((state) => state?.songs.songChanged);
   const selectedSong = useSelector((state) => state?.songs.selectedSong);
   const playing = useSelector((state) => state?.songs.playing);
+  
   const { playlistId } = route.params
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     let playlistSongs = [];
     if (songList) {
@@ -41,15 +43,22 @@ export const PlaylistSongs = ({route}) => {
     setSongs(playlistSongs);
 
     if (songChanged) {
-      dispatch(clearChanged());
+      dispatch(getSongs())
     }
-  }, [playlistId, songChanged]);
+  }, [playlistId, songList]);
+
+  const removeFromPlaylist = (item) => {
+    let playlists = JSON.parse(item.playlists)
+    let newPlaylists = playlists.filter((p) => p.playlistId !== playlistId)
+    let formattedPlaylists = JSON.stringify(newPlaylists)
+    dispatch(editSong(item.songId, item.name, item.artist, formattedPlaylists))
+  }
 
   const renderItem = (item) => (
     <Item
       item={item}
       onPress={() => dispatch(setSelectedSong(item))}
-      onDelete={() => console.log("edit song!")}
+      onDelete={() => removeFromPlaylist(item)}
       selectedSong={selectedSong || null}
     />
   );
