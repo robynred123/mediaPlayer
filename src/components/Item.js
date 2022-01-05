@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   View,
   Text,
-  FlatList,
-  StyleSheet,
   TouchableOpacity,
 } from "react-native";
 import { styles } from "../screens/ScreenStyles";
@@ -18,7 +16,6 @@ export const Item = ({
 }) => {
 
   const backgroundColor = () => {
-    console.log(item, selectedSong)
     if(selectedSong){
       if(item.songId === selectedSong.songId) {
           return {

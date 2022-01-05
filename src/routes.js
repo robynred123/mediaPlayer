@@ -9,6 +9,7 @@ import { TouchableOpacity, View } from "react-native";
 
 import { Songs } from "./screens/Songs";
 import { Playlists } from "./screens/Playlists";
+import { PlaylistSongs } from "./screens/PlaylistSongs";
 import { createSongTable, createTables, dropTables, getSongs } from "../src/actions/songs";
 import { createPlaylistTable, getPlaylists } from "../src/actions/playlists";
 import { Add } from "./screens/Add";
@@ -117,6 +118,11 @@ export const Routes = () => {
               headerShown: true,
               headerTitle: "Add New"
             }}
+          />
+          <Stack.Screen
+            name="PlaylistSongs"
+            component={PlaylistSongs}
+            options={({ route }) => ({ title: route.params.playlistName, headerShown: true })}
           />
         </Stack.Navigator>
       </NavigationContainer>

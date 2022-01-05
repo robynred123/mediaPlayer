@@ -4,10 +4,7 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
-  TouchableOpacity,
 } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { MusicPlayer } from "../components/MusicPlayer";
@@ -17,7 +14,7 @@ import { clearChanged } from "../actions/songs";
 import { styles } from "./ScreenStyles";
 import { Item } from "../components/Item";
 
-export const Playlists = () => {
+export const Playlists = ({navigation}) => {
   const songList = useSelector((state) => state?.songs.songList);
   const error = useSelector((state) => state?.songs.error);
   const selectedSong = useSelector((state) => state?.songs.selectedSong);
@@ -47,7 +44,9 @@ export const Playlists = () => {
   const renderItem = (item) => (
     <Item 
       item={item}
-      onPress={() => console.log('pressed!')/*dispatch(setSelectedPlaylist(item))*/}
+      onPress={() => {
+        navigation.navigate('PlaylistSongs', { playlistName: item.name, playlistId: item.playlistId })}
+      }
       onDelete={() => dispatch(deletePlaylist(item.playlistId))}
       selectedSong={selectedSong || null}
     />
