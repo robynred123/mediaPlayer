@@ -10,8 +10,10 @@ import {
 import { useDispatch } from "react-redux";
 import MultiSelect from "react-native-multiple-select";
 
+import { GREEN } from "../util/constants";
 import { editSong } from "../actions/songs";
 import { hideModal } from "../actions/app";
+import { borderColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
 export const EditModal = ({ visible, song, playlists }) => {
   const [name, setName] = useState(song?.name);
@@ -168,11 +170,11 @@ export const EditModal = ({ visible, song, playlists }) => {
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => cancel()}
               >
-                <Text style={styles.textStyle}>Cancel</Text>
+                <Text style={styles.textStyleCancel}>Cancel</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
+                style={[styles.button, styles.buttonOpen]}
                 onPress={() => submit()}
               >
                 <Text style={styles.textStyle}>Submit</Text>
@@ -218,13 +220,20 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: GREEN,
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: GREEN
   },
   textStyle: {
     color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  textStyleCancel: {
+    color: GREEN,
     fontWeight: "bold",
     textAlign: "center",
   },

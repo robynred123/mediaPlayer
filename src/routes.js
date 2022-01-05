@@ -121,7 +121,7 @@ export const Routes = () => {
     <>
       <View>
         <Spinner visible={loadingSongs} textContent={"Loading"} />
-        <ErrorModal errorMessage={error} visible={error} onClose={() => dispatch(clearError())}/>
+        <ErrorModal errorMessage={error} visible={error ? true : false} onClose={() => dispatch(clearError())}/>
       </View>
 
       <NavigationContainer>

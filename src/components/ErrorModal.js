@@ -6,6 +6,7 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
+import { GREEN } from "../util/constants";
 
 export const ErrorModal = ({ visible, errorMessage, onClose }) => {
   return (
@@ -22,10 +23,10 @@ export const ErrorModal = ({ visible, errorMessage, onClose }) => {
             <Text >{errorMessage}</Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity 
-                style={styles.buttonOpen}
+                style={[styles.button, styles.buttonOpen]}
                 onPress={onClose}
               >
-                <Text>Ok</Text>
+                <Text style={styles.textStyle}>Ok</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -60,18 +61,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height: "50%",
+    height: '25%'
   },
   button: {
     borderRadius: 20,
     padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: GREEN,
   },
   textStyle: {
     color: "white",
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: 'center',
     bottom: 20,
     position: "absolute",
     zIndex: 1,
