@@ -1,3 +1,4 @@
+import * as SQLite from "expo-sqlite";
 import {
   GET_SONGS,
   GET_SONGS_SUCCESS,
@@ -20,8 +21,16 @@ import {
   DROP_TABLES,
   DROP_TABLES_SUCESS,
   DROP_TABLES_FAILURE,
+  CLEAR_ERROR
 } from "../util/constants";
-import * as SQLite from "expo-sqlite";
+import {
+  CREATE_SONGS_TABLE_ERROR, 
+  GET_SONGS_ERROR,
+  DROP_TABLE_ERROR,
+  ADD_SONG_ERROR,
+  EDIT_SONG_ERROR,
+  DELETE_SONG_ERROR
+} from '../util/errorMessages'
 
 const db = SQLite.openDatabase("db.mediaPlayer");
 
@@ -42,7 +51,7 @@ export const createSongTable = () => {
         (txObj, error) => {
           dispatch({
             type: CREATE_SONG_TABLE_FAILURE,
-            error: "whooops",
+            error: CREATE_SONGS_TABLE_ERROR
           });
         }
       );
@@ -67,7 +76,7 @@ export const dropTables = () => {
         (txObj, error) => {
           dispatch({
             type: DROP_TABLES_FAILURE,
-            error: "whooops",
+            error: DROP_TABLE_ERROR
           });
         }
       );
@@ -93,7 +102,7 @@ export const getSongs = () => {
         (txObj, error) => {
           dispatch({
             type: GET_SONGS_FAILURE,
-            error: "whoops, no songs for you",
+            error: GET_SONGS_ERROR
           });
         }
       );
@@ -119,7 +128,7 @@ export const addSong = ({ name, artist, location, playlists }) => {
         (txObj, error) => {
           dispatch({
             type: ADD_SONG_FAILURE,
-            error: "whoops, no songs for you",
+            error: ADD_SONG_ERROR
           });
         }
       );
@@ -161,7 +170,7 @@ export const editSong = (id, name, artist, playlists) => {
           } else {
             dispatch({
               type: EDIT_SONG_FAILURE,
-              error: "Failed to update song",
+              error: EDIT_SONG_ERROR
             });
           }
         },
@@ -169,7 +178,7 @@ export const editSong = (id, name, artist, playlists) => {
           console.log(error)
           dispatch({
             type: EDIT_SONG_FAILURE,
-            error: "Failed to update song",
+            error: EDIT_SONG_ERROR
           });
         }
       );
@@ -194,14 +203,14 @@ export const deleteSong = (id) => {
           } else {
             dispatch({
               type: DELETE_SONG_FAILURE,
-              error: "Failed to delete song",
+              error: DELETE_SONG_ERROR
             });
           }
         },
         (txObj, error) => {
           dispatch({
             type: DELETE_SONG_FAILURE,
-            error: "Failed to delete song",
+            error: DELETE_SONG_ERROR
           });
         }
       );
@@ -217,3 +226,11 @@ export const setSongStatus = (status) => {
     });
   };
 };
+
+export const clearError = () => {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_ERROR
+    })
+  }
+}

@@ -19,7 +19,8 @@ import {
   SET_SONG_STATUS,
   DROP_TABLES,
   DROP_TABLES_SUCESS,
-  DROP_TABLES_FAILURE
+  DROP_TABLES_FAILURE,
+  CLEAR_ERROR
 } from "../util/constants";
 
 export const initialState = {
@@ -76,6 +77,12 @@ export default function (state = initialState, action) {
         loading: false, 
         songChanged: false
       }
+    case CLEAR_ERROR: 
+      return {
+        ...state, 
+        error: null
+      }
+    //loading states
     case CREATE_SONG_TABLE:
     case DROP_TABLES:
     case GET_SONGS:
@@ -86,6 +93,7 @@ export default function (state = initialState, action) {
         ...state,
         loading: true,
       };
+    //error states
     case DROP_TABLES_FAILURE:
     case CREATE_SONG_TABLE_FAILURE:
     case GET_SONGS_FAILURE:

@@ -12,7 +12,6 @@ import MultiSelect from "react-native-multiple-select";
 
 import { editSong } from "../actions/songs";
 import { hideModal } from "../actions/app";
-import { deletePlaylist } from "../actions/playlists";
 
 export const EditModal = ({ visible, song, playlists }) => {
   const [name, setName] = useState(song?.name);

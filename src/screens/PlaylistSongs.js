@@ -12,11 +12,10 @@ import { Item } from "../components/Item";
 export const PlaylistSongs = ({route}) => {
   const [songs, setSongs] = useState([]);
   const songList = useSelector((state) => state?.songs.songList);
-  const error = useSelector((state) => state?.songs.error);
   const songChanged = useSelector((state) => state?.songs.songChanged);
   const selectedSong = useSelector((state) => state?.songs.selectedSong);
   const playing = useSelector((state) => state?.songs.playing);
-  
+
   const { playlistId } = route.params
 
   const dispatch = useDispatch();

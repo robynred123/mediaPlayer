@@ -10,7 +10,8 @@ import { TouchableOpacity, View } from "react-native";
 import { Songs } from "./screens/Songs";
 import { Playlists } from "./screens/Playlists";
 import { PlaylistSongs } from "./screens/PlaylistSongs";
-import { createSongTable, createTables, dropTables, getSongs } from "../src/actions/songs";
+import { createSongTable, dropTables, getSongs, clearError } from "../src/actions/songs";
+import { ErrorModal } from "./components/ErrorModal";
 import { createPlaylistTable, getPlaylists } from "../src/actions/playlists";
 import { Add } from "./screens/Add";
 import { GREEN } from "./util/constants";
@@ -19,7 +20,9 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const tabNav = ({ navigation }) => {
+  
   const dispatch = useDispatch()
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -32,7 +35,6 @@ const tabNav = ({ navigation }) => {
             iconName = focused ? "list-circle" : "list-circle-outline";
           }
 
-          // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: GREEN,
@@ -78,9 +80,15 @@ const tabNav = ({ navigation }) => {
 export const Routes = () => {
   const loadingSongs = useSelector((state) => state?.songs?.loading);
   const songTableCreated = useSelector((state) => state?.songs?.songTableCreated);
-  const playlistTableCreated = useSelector((state) => state?.playlists?.playlistTableCreated);
   const songList = useSelector((state) => state?.songs.songList);
+  const songError = useSelector((state) => state?.songs?.error)
+
   const playlistsList = useSelector((state) => state?.playlists?.playlists);
+  const playlistTableCreated = useSelector((state) => state?.playlists?.playlistTableCreated);
+  const playlistError = useSelector((state) => state?.playlists?.error)
+
+  const [error, setError] = useState(null)
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -102,10 +110,18 @@ export const Routes = () => {
     }
   }, [loadingSongs]);
 
+  useEffect(() => {
+    if(songError !== null || playlistError !== null) {
+      setError(songError || playlistError)
+    }
+    else(setError(null))
+  }, [songError, playlistError])
+
   return (
     <>
       <View>
         <Spinner visible={loadingSongs} textContent={"Loading"} />
+        <ErrorModal errorMessage={error} visible={error} onClose={() => dispatch(clearError())}/>
       </View>
 
       <NavigationContainer>

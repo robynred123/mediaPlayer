@@ -1,3 +1,4 @@
+import * as SQLite from "expo-sqlite";
 import { 
   GET_PLAYLISTS, 
   GET_PLAYLISTS_SUCCESS,
@@ -12,7 +13,12 @@ import {
   DELETE_PLAYLIST_SUCCESS,
   DELETE_PLAYLIST_FAILURE
 } from "../util/constants";
-import * as SQLite from "expo-sqlite";
+import { 
+  ADD_PLAYLIST_ERROR, 
+  CREATE_PLAYLISTS_TABLE_ERROR, 
+  DELETE_PLAYLIST_ERROR, 
+  GET_PLAYLISTS_ERROR 
+} from "../util/errorMessages";
 
 const db = SQLite.openDatabase("db.mediaPlayer");
 
@@ -33,7 +39,7 @@ export const createPlaylistTable = () => {
         (txObj, error) => {
           dispatch({
             type: CREATE_PLAYLIST_TABLE_FAILURE,
-            error: "whooops",
+            error: CREATE_PLAYLISTS_TABLE_ERROR
           });
         }
       );
@@ -59,7 +65,7 @@ export const getPlaylists = () => {
         (txObj, error) => {
           dispatch({
             type: GET_PLAYLISTS_FAILURE,
-            error: "whoops, no playlsts for you",
+            error: GET_PLAYLISTS_ERROR
           });
         }
       );
@@ -86,7 +92,7 @@ export const addPlaylist = ( name ) => {
           console.log(error)
           dispatch({
             type: ADD_PLAYLIST_FAILURE,
-            error: error,
+            error: ADD_PLAYLIST_ERROR
           });
         }
       );
@@ -111,14 +117,14 @@ export const deletePlaylist = (id) => {
           } else {
             dispatch({
               type: DELETE_PLAYLIST_FAILURE,
-              error: "Failed to delete song",
+              error: DELETE_PLAYLIST_ERROR
             });
           }
         },
         (txObj, error) => {
           dispatch({
             type: DELETE_PLAYLIST_FAILURE,
-            error: "Failed to delete song",
+            error: DELETE_PLAYLIST_ERROR
           });
         }
       );
