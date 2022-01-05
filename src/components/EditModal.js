@@ -13,7 +13,6 @@ import MultiSelect from "react-native-multiple-select";
 import { GREEN } from "../util/constants";
 import { editSong } from "../actions/songs";
 import { hideModal } from "../actions/app";
-import { borderColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
 export const EditModal = ({ visible, song, playlists }) => {
   const [name, setName] = useState(song?.name);
